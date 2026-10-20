@@ -1,0 +1,44 @@
+[
+  {
+    "id": "post-3",
+    "title": "Summer Tape / Session 04",
+    "date": "2026-10-15",
+    "tags": ["audio", "mixtape", "soundcloud"],
+    "summary": "Late night session recorded directly from the hardware mixer. House grooves, 80s tape compression, and unreleased cuts.",
+    "content": "This session came together over a weekend exploring FM synth patches and analog chorus effects. Everything was multitracked through vintage hardware before running to 1/4-inch tape.\n\nTracklist highlights include early sketches of the upcoming EP alongside edits of classic electro cuts.",
+    "coverImage": "/assets/sample-artwork.svg",
+    "links": [
+      {
+        "type": "soundcloud",
+        "label": "Listen on SoundCloud",
+        "url": "https://soundcloud.com"
+      }
+    ]
+  },
+  {
+    "id": "post-2",
+    "title": "Open Source: Web Audio Visualizer",
+    "date": "2026-09-28",
+    "tags": ["code", "github", "web-audio"],
+    "summary": "A lightweight canvas-based oscilloscope and FFT spectrum analyzer built with the Web Audio API.",
+    "content": "I built a tiny, zero-dependency browser oscilloscope to visualize audio streams with 60fps smoothing. Tested with both microphone input and HTML5 audio elements.\n\nThe project is fully open source under the MIT license.",
+    "coverImage": null,
+    "links": [
+      {
+        "type": "github",
+        "label": "View Repository on GitHub",
+        "url": "https://github.com"
+      }
+    ]
+  },
+  {
+    "id": "post-1",
+    "title": "Setting Up Shop",
+    "date": "2026-09-01",
+    "tags": ["meta", "notes"],
+    "summary": "A new minimal home on the web for archiving tracks, publishing thoughts, and sharing project repos.",
+    "content": "Decided to carve out a clean, distraction-free corner of the web. This space will serve as a hub for both audio releases and code experiments.\n\nHosted statically on GCP with custom domain routing.",
+    "coverImage": null,
+    "links": []
+  }
+]

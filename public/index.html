@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David Council</title>
+
+  <meta name="description" content="Personal blog, audio releases, and code projects.">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <div class="site-wrapper">
+    <!-- Header with Banner & Identity -->
+    <header class="site-header">
+      <div class="banner-container">
+        <img id="site-banner" class="banner-img" src="/assets/banner.svg" alt="Banner artwork">
+      </div>
+      <div class="header-content">
+        <div class="avatar-container">
+          <img id="site-avatar" class="avatar-img" src="/assets/avatar.svg" alt="Avatar / Insignia">
+        </div>
+        <div class="header-text">
+          <h1 id="site-title">Loading...</h1>
+          <p id="site-tagline" class="tagline"></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation / External Links Bar -->
+    <nav class="nav-bar" id="nav-links">
+      <!-- Populated dynamically from site-config.json -->
+    </nav>
+
+    <!-- Bio / Intro snippet -->
+    <section class="bio-section">
+      <p id="site-bio"></p>
+    </section>
+
+    <!-- Main Posts Feed -->
+    <main>
+      <div class="section-label">LATEST TRANSMISSIONS &amp; LOGS</div>
+      <div class="posts-feed" id="posts-container">
+        <!-- Rendered by app.js from posts.json -->
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div id="footer-copyright"></div>
+      <div id="footer-subtext"></div>
+    </footer>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+
+</html>

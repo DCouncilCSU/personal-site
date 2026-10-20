@@ -1,0 +1,305 @@
+:root {
+  --bg-page: #f4f4f5;
+  --bg-card: #ffffff;
+  --border-color: #18181b;
+  --border-width: 2px;
+  --shadow-offset: 4px;
+  
+  --text-main: #18181b;
+  --text-muted: #71717a;
+  --text-invert: #ffffff;
+  
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --badge-bg: #f4f4f5;
+  --badge-text: #27272a;
+  
+  --font-mono: "Courier Prime", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  --radius: 0px; /* Set to 6px or 8px if you prefer rounded edges */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #09090b;
+    --bg-card: #18181b;
+    --border-color: #3f3f46;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --badge-bg: #27272a;
+    --badge-text: #e4e4e7;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.site-wrapper {
+  width: 100%;
+  max-width: 760px;
+  background-color: var(--bg-card);
+  border-left: var(--border-width) solid var(--border-color);
+  border-right: var(--border-width) solid var(--border-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 24px 16px;
+  }
+  .site-wrapper {
+    border: var(--border-width) solid var(--border-color);
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-color);
+    min-height: auto;
+  }
+}
+
+/* Header & Banner */
+.site-header {
+  border-bottom: var(--border-width) solid var(--border-color);
+  position: relative;
+  background-color: #09090b;
+}
+
+.banner-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: #18181b;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.header-content {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-card);
+  border-top: var(--border-width) solid var(--border-color);
+}
+
+.avatar-container {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border: var(--border-width) solid var(--border-color);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.header-text h1 {
+  font-size: 1.5rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.header-text p.tagline {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Nav / Links Bar */
+.nav-bar {
+  background-color: var(--text-main);
+  color: var(--text-invert);
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: var(--border-width) solid var(--border-color);
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+}
+
+.nav-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s ease;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+/* Bio Section */
+.bio-section {
+  padding: 20px;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Main Content Area */
+main {
+  flex-grow: 1;
+  padding: 24px 20px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Post Cards */
+.posts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.post-card {
+  border: var(--border-width) solid var(--border-color);
+  background: var(--bg-card);
+  padding: 20px;
+  position: relative;
+}
+
+.post-card:hover {
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.post-date {
+  font-weight: 600;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-badge {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  border: 1px solid var(--border-color);
+  text-transform: lowercase;
+}
+
+.post-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin-bottom: 8px;
+}
+
+.post-cover {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border: var(--border-width) solid var(--border-color);
+  margin: 14px 0;
+  display: block;
+}
+
+.post-body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  white-space: pre-line;
+  margin-bottom: 16px;
+}
+
+/* Post Action Links (SoundCloud, GitHub, etc.) */
+.post-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  text-decoration: none;
+  border: var(--border-width) solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: all 0.15s ease;
+}
+
+.btn-link:hover {
+  background: var(--text-main);
+  color: var(--text-invert);
+}
+
+/* Footer */
+.site-footer {
+  border-top: var(--border-width) solid var(--border-color);
+  padding: 20px;
+  background: var(--bg-card);
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .site-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}

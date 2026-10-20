@@ -1,0 +1,28 @@
+{
+  "siteTitle": "David Council - dcouncil",
+  "tagline": "Audio experiments, code projects, etcetera.",
+  "bio": "Playing tunes, making stuff.",
+  "banner": "/assets/banner.svg",
+  "avatar": "/assets/avatar.svg",
+  "links": [
+    {
+      "name": "SoundCloud",
+      "url": "https://soundcloud.com/dcouncil",
+      "icon": "soundcloud"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/DCouncilCSU",
+      "icon": "github"
+    },
+    {
+      "name": "Email",
+      "url": "mailto:dcouncilcsu@gmail.com",
+      "icon": "envelope"
+    }
+  ],
+  "footer": {
+    "copyright": "© 2026 David Council",
+    "subtext": "Hosted by Firebase / GCP"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "personal-site",
+  "version": "1.0.0",
+  "description": "Personal blog and project portfolio hosted on GCP Firebase",
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "deploy": "firebase deploy --only hosting"
+  },
+  "keywords": ["firebase", "blog", "portfolio"],
+  "author": "",
+  "license": "MIT"
+}
