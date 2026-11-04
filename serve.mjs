@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, "public");
+const ADMIN_DIR = path.join(__dirname, "admin");
+const POSTS_FILE = path.join(PUBLIC_DIR, "content", "posts.json");
 const PORT = process.env.PORT || 8080;
 
 const MIME_TYPES = {
@@ -26,6 +28,77 @@ const server = http.createServer((req, res) => {
   // Strip query strings and hash
   const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
+
+  // API endpoint to create a new post
+  if (req.method === "POST" && pathname === "/api/posts") {
+    let body = "";
+    req.on("data", chunk => {
+      body += chunk;
+      if (body.length > 2e6) {
+        req.destroy();
+      }
+    });
+
+    req.on("end", () => {
+      try {
+        const newPostData = JSON.parse(body);
+
+        if (!newPostData.title || typeof newPostData.title !== "string") {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: "Title is required" }));
+        }
+
+        const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
+        const posts = JSON.parse(rawPosts);
+
+        // Compute next post ID (e.g. post-4)
+        let maxIndex = 0;
+        for (const post of posts) {
+          if (post.id && post.id.startsWith("post-")) {
+            const num = parseInt(post.id.replace("post-", ""), 10);
+            if (!isNaN(num) && num > maxIndex) {
+              maxIndex = num;
+            }
+          }
+        }
+        const nextId = `post-${maxIndex + 1}`;
+
+        const postEntry = {
+          id: nextId,
+          title: newPostData.title.trim(),
+          date: newPostData.date || new Date().toISOString().slice(0, 10),
+          tags: Array.isArray(newPostData.tags)
+            ? newPostData.tags
+            : (newPostData.tags || "")
+                .split(",")
+                .map(t => t.trim().toLowerCase())
+                .filter(Boolean),
+          summary: (newPostData.summary || "").trim(),
+          content: (newPostData.content || "").trim(),
+          coverImage: newPostData.coverImage ? newPostData.coverImage.trim() : null,
+          links: Array.isArray(newPostData.links) ? newPostData.links : []
+        };
+
+        // Prepend new post
+        posts.unshift(postEntry);
+
+        fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2) + "\n", "utf-8");
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ success: true, post: postEntry }));
+      } catch (err) {
+        console.error("Failed to save post:", err);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Internal server error saving post" }));
+      }
+    });
+    return;
+  }
+
+  // Admin UI route (local dev only, served from admin/ outside public/)
+  if (pathname === "/admin" || pathname === "/admin/" || pathname === "/admin/index.html") {
+    return serveFile(path.join(ADMIN_DIR, "index.html"), 200, res);
+  }
 
   // Default to index.html
   if (pathname === "/" || pathname === "") {

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - New Entry</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-container {
+      width: 100%;
+      max-width: 680px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .admin-card {
+      background: var(--bg-card);
+      border: var(--border-width) solid var(--border-color);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--border-color);
+      padding: 1.5rem;
+    }
+    .admin-title {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hint {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      margin-top: 0.2rem;
+    }
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: var(--border-width) solid var(--border-color);
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+    }
+    textarea {
+      font-family: var(--font-mono);
+      resize: vertical;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: 2px solid var(--accent);
+      background: var(--bg-card);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 600px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .link-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 1fr 36px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1rem;
+      background: var(--text-main);
+      color: var(--text-invert);
+      border: var(--border-width) solid var(--border-color);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.6rem;
+    }
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+      border-color: #b91c1c;
+      padding: 0.4rem;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+    }
+    .status-msg {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      border: var(--border-width) solid var(--border-color);
+    }
+    .status-msg.success {
+      display: block;
+      background: #ecfdf5;
+      color: #065f46;
+      border-color: #10b981;
+    }
+    .status-msg.error {
+      display: block;
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="admin-title">
+        <span>[+] New Post Entry</span>
+        <a href="/" class="btn-secondary" style="text-decoration:none;">&larr; View Site</a>
+      </div>
+
+      <form id="post-form">
+        <div class="form-group">
+          <label for="title">Title *</label>
+          <input type="text" id="title" required placeholder="e.g. Ambient Sessions / Vol. 1">
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" placeholder="audio, ambient, soundcloud">
+            <span class="hint">Comma-separated</span>
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="summary">Summary</label>
+          <input type="text" id="summary" placeholder="One-line summary for preview card...">
+        </div>
+
+        <div class="form-group">
+          <label for="coverImage">Cover Image URL (optional)</label>
+          <input type="text" id="coverImage" placeholder="/assets/sample-artwork.svg or empty">
+        </div>
+
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea id="content" rows="6" placeholder="Write full text or post notes here..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>External Links</label>
+          <div id="links-container"></div>
+          <button type="button" class="btn btn-secondary" id="add-link-btn" style="margin-top:0.3rem;">+ Add Link</button>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn" id="submit-btn">Append Post to posts.json</button>
+          <a href="/" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">Cancel</a>
+        </div>
+      </form>
+
+      <div id="status-box" class="status-msg"></div>
+    </div>
+  </div>
+
+  <script>
+    // Default date to today
+    document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+
+    const linksContainer = document.getElementById('links-container');
+    const addLinkBtn = document.getElementById('add-link-btn');
+
+    function createLinkRow(type = 'github', label = '', url = '') {
+      const row = document.createElement('div');
+      row.className = 'link-row';
+      row.innerHTML = `
+        <select class="link-type">
+          <option value="github"${type === 'github' ? ' selected' : ''}>GitHub</option>
+          <option value="soundcloud"${type === 'soundcloud' ? ' selected' : ''}>SoundCloud</option>
+          <option value="demo"${type === 'demo' ? ' selected' : ''}>Demo / Live</option>
+          <option value="external"${type === 'external' ? ' selected' : ''}>External</option>
+        </select>
+        <input type="text" class="link-label" placeholder="Button Label" value="${label}">
+        <input type="text" class="link-url" placeholder="https://..." value="${url}">
+        <button type="button" class="btn btn-danger remove-link" title="Remove">&times;</button>
+      `;
+      row.querySelector('.remove-link').addEventListener('click', () => row.remove());
+      return row;
+    }
+
+    addLinkBtn.addEventListener('click', () => {
+      linksContainer.appendChild(createLinkRow());
+    });
+
+    // Form submission
+    const form = document.getElementById('post-form');
+    const statusBox = document.getElementById('status-box');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusBox.className = 'status-msg';
+      submitBtn.disabled = true;
+
+      // Collect links
+      const links = [];
+      document.querySelectorAll('.link-row').forEach(row => {
+        const type = row.querySelector('.link-type').value;
+        const label = row.querySelector('.link-label').value.trim();
+        const url = row.querySelector('.link-url').value.trim();
+        if (label && url) {
+          links.push({ type, label, url });
+        }
+      });
+
+      const payload = {
+        title: document.getElementById('title').value,
+        date: document.getElementById('date').value,
+        tags: document.getElementById('tags').value,
+        summary: document.getElementById('summary').value,
+        coverImage: document.getElementById('coverImage').value || null,
+        content: document.getElementById('content').value,
+        links: links
+      };
+
+      try {
+        const res = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to save');
+        }
+
+        statusBox.className = 'status-msg success';
+        statusBox.innerHTML = `&check; Successfully created <strong>${data.post.id}</strong> ("${data.post.title}"). Added to <code>posts.json</code>!`;
+        
+        // Reset form
+        form.reset();
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+        linksContainer.innerHTML = '';
+      } catch (err) {
+        statusBox.className = 'status-msg error';
+        statusBox.textContent = `Error: ${err.message}`;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
+

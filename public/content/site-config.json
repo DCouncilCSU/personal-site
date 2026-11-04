@@ -1,7 +1,7 @@
 {
   "siteTitle": "David Council - dcouncil",
   "tagline": "Audio experiments, code projects, etcetera.",
-  "bio": "Playing tunes, making stuff.",
+  "bio": "Just a dude in Fort Collins, living life and trying things.",
   "banner": "/assets/banner.svg",
   "avatar": "/assets/avatar.svg",
   "links": [
@@ -22,7 +22,7 @@
     }
   ],
   "footer": {
-    "copyright": "© 2026 David Council",
-    "subtext": "Hosted by Firebase / GCP"
+    "copyright": "©2026 David Council",
+    "subtext": "Hosted by Firebase/GCP"
   }
 }
