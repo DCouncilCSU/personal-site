@@ -4,20 +4,21 @@
   --border-color: #18181b;
   --border-width: 2px;
   --shadow-offset: 4px;
-  
+
   --text-main: #18181b;
   --text-muted: #71717a;
   --text-invert: #ffffff;
-  
+
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
   --badge-bg: #f4f4f5;
   --badge-text: #27272a;
-  
+
   --font-mono: "Courier Prime", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  
-  --radius: 0px; /* Set to 6px or 8px if you prefer rounded edges */
+
+  --radius: 0px;
+  /* Set to 6px or 8px if you prefer rounded edges */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,6 +65,7 @@ body {
   body {
     padding: 24px 16px;
   }
+
   .site-wrapper {
     border: var(--border-width) solid var(--border-color);
     box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-color);
@@ -131,7 +133,7 @@ body {
 
 /* Nav / Links Bar */
 .nav-bar {
-  background-color: var(--text-main);
+  background-color: var(--bg-page);
   color: var(--text-invert);
   padding: 10px 20px;
   display: flex;
