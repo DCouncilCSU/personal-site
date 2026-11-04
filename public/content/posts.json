@@ -22,41 +22,21 @@
   },
   {
     "id": "post-3",
-    "title": "Summer Tape / Session 04",
+    "title": "Raveyard Practice",
     "date": "2026-10-15",
     "tags": [
       "audio",
       "mixtape",
       "soundcloud"
     ],
-    "summary": "Late night session recorded directly from the hardware mixer. House grooves, 80s tape compression, and unreleased cuts.",
-    "content": "This session came together over a weekend exploring FM synth patches and analog chorus effects. Everything was multitracked through vintage hardware before running to 1/4-inch tape.\n\nTracklist highlights include early sketches of the upcoming EP alongside edits of classic electro cuts.",
-    "coverImage": "/assets/sample-artwork.svg",
+    "summary": "The set that never was",
+    "content": "",
+    "coverImage": "https://i1.sndcdn.com/avatars-BnGHV2Qz3MiyjsbY-KrqrhA-t500x500.jpg",
     "links": [
       {
         "type": "soundcloud",
         "label": "Listen on SoundCloud",
-        "url": "https://soundcloud.com"
-      }
-    ]
-  },
-  {
-    "id": "post-2",
-    "title": "Open Source: Web Audio Visualizer",
-    "date": "2026-09-28",
-    "tags": [
-      "code",
-      "github",
-      "web-audio"
-    ],
-    "summary": "A lightweight canvas-based oscilloscope and FFT spectrum analyzer built with the Web Audio API.",
-    "content": "I built a tiny, zero-dependency browser oscilloscope to visualize audio streams with 60fps smoothing. Tested with both microphone input and HTML5 audio elements.\n\nThe project is fully open source under the MIT license.",
-    "coverImage": null,
-    "links": [
-      {
-        "type": "github",
-        "label": "View Repository on GitHub",
-        "url": "https://github.com"
+        "url": "https://soundcloud.com/dcouncil/raveyard-practice"
       }
     ]
   },
@@ -68,8 +48,8 @@
       "meta",
       "notes"
     ],
-    "summary": "A new minimal home on the web for archiving tracks, publishing thoughts, and sharing project repos.",
-    "content": "Decided to carve out a clean, distraction-free corner of the web. This space will serve as a hub for both audio releases and code experiments.\n\nHosted statically on GCP with custom domain routing.",
+    "summary": "My new minimal home on the web for promoting tracks, publishing thoughts, and sharing project repos.",
+    "content": "We will see what gets posted here. Digital diary for DC. Hosted statically on GCP.",
     "coverImage": null,
     "links": []
   }

@@ -15,6 +15,28 @@ Then open `http://localhost:8080` in your browser.
 
 ---
 
+## Local Admin Panel (Managing Posts)
+
+A streamlined, zero-dependency admin GUI runs locally alongside your dev preview to create, edit, and delete entries in `public/content/posts.json`.
+
+```bash
+npm start
+# Open http://localhost:8080/admin
+```
+
+### Simplicity & Workflow
+- **Form-driven editing:** No manual JSON editing, comma syntax checks, or manual string escaping for quotes and multiline text.
+- **Auto-generated IDs & Dates:** Automatically assigns the next sequential ID (`post-4`, etc.) and pre-fills today's date.
+- **Full CRUD operations:** Create new posts, modify existing entries with single-click form population, or remove old posts directly from the browser.
+- **Dynamic link management:** Add platform-specific external buttons (SoundCloud, GitHub, Live Demo, etc.) with a single click.
+
+### Built-in Security by Design
+- **Completely isolated from production:** The admin interface (`admin/index.html` and `admin/admin.css`) lives outside the deployed `public/` directory. Firebase Hosting only ever sees and uploads the contents of `public/`.
+- **Zero server footprint in the cloud:** The administrative API endpoints (`POST`, `PUT`, `DELETE` at `/api/posts`) exist only in your local Node.js development server (`serve.mjs`). On the live production site, Firebase serves strictly static assets.
+- **Double deployment guard:** `firebase.json` explicitly ignores `admin/**`, ensuring that even if files are accidentally placed in the deploy folder, they are never uploaded to GCP / Firebase Hosting.
+
+---
+
 ## How to Customize
 
 ### 1. Personal Info & Links
@@ -23,35 +45,14 @@ Open `public/content/site-config.json` to change:
 - Tagline & bio
 - Links in the navigation bar (SoundCloud, GitHub, Bluesky, Email, etc.)
 
-### 2. Publishing Blog Posts
-Open `public/content/posts.json` and add a new item to the top of the array:
-```json
-{
-  "id": "post-4",
-  "title": "My New Track",
-  "date": "2026-10-20",
-  "tags": ["audio", "soundcloud"],
-  "summary": "Short teaser of the post...",
-  "content": "Full description or story...",
-  "coverImage": "/assets/my-artwork.png",
-  "links": [
-    {
-      "type": "soundcloud",
-      "label": "Listen on SoundCloud",
-      "url": "https://soundcloud.com/..."
-    }
-  ]
-}
-```
-
-### 3. Swapping Artwork / Assets
+### 2. Swapping Artwork / Assets
 All images and artwork live in `public/assets/`:
 - **Header Banner:** `public/assets/banner.svg` (recommended `1200x400` px)
 - **Avatar / Insignia:** `public/assets/avatar.svg` (recommended `400x400` px)
 - **Post Covers:** Put any `.png`, `.jpg`, or `.webp` in `public/assets/` and link to it in `posts.json`.
 - See `public/assets/ASSETS_GUIDE.md` for full dimensions and tips.
 
-### 4. Customizing Style & Colors
+### 3. Customizing Style & Colors
 Open `public/css/style.css`. All colors, fonts, border widths, and shadows are exposed at the top under `:root`:
 ```css
 :root {
