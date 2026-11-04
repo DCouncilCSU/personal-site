@@ -3,156 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - New Entry</title>
+  <title>Local Admin - Manage Posts</title>
   <link rel="stylesheet" href="/css/style.css">
-  <style>
-    .admin-container {
-      width: 100%;
-      max-width: 680px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .admin-card {
-      background: var(--bg-card);
-      border: var(--border-width) solid var(--border-color);
-      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--border-color);
-      padding: 1.5rem;
-    }
-    .admin-title {
-      font-family: var(--font-mono);
-      font-size: 1.25rem;
-      margin-bottom: 1.25rem;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 0.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .form-group {
-      margin-bottom: 1.1rem;
-    }
-    label {
-      display: block;
-      font-weight: 600;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      margin-bottom: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .hint {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      margin-top: 0.2rem;
-    }
-    input[type="text"],
-    input[type="date"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 0.6rem 0.75rem;
-      border: var(--border-width) solid var(--border-color);
-      background: var(--bg-page);
-      color: var(--text-main);
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-    }
-    textarea {
-      font-family: var(--font-mono);
-      resize: vertical;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: 2px solid var(--accent);
-      background: var(--bg-card);
-    }
-    .row {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1rem;
-    }
-    @media (max-width: 600px) {
-      .row {
-        grid-template-columns: 1fr;
-      }
-    }
-    .link-row {
-      display: grid;
-      grid-template-columns: 110px 1fr 1fr 36px;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      align-items: center;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.6rem 1rem;
-      background: var(--text-main);
-      color: var(--text-invert);
-      border: var(--border-width) solid var(--border-color);
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s ease;
-    }
-    .btn:hover {
-      opacity: 0.9;
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-main);
-      font-size: 0.8rem;
-      padding: 0.4rem 0.6rem;
-    }
-    .btn-danger {
-      background: #ef4444;
-      color: white;
-      border-color: #b91c1c;
-      padding: 0.4rem;
-    }
-    .actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px dashed var(--border-color);
-    }
-    .status-msg {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      display: none;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      border: var(--border-width) solid var(--border-color);
-    }
-    .status-msg.success {
-      display: block;
-      background: #ecfdf5;
-      color: #065f46;
-      border-color: #10b981;
-    }
-    .status-msg.error {
-      display: block;
-      background: #fef2f2;
-      color: #991b1b;
-      border-color: #ef4444;
-    }
-  </style>
+  <link rel="stylesheet" href="/admin/admin.css">
 </head>
 <body>
   <div class="admin-container">
-    <div class="admin-card">
+
+    <!-- Form Section -->
+    <div class="admin-card" id="form-card">
       <div class="admin-title">
-        <span>[+] New Post Entry</span>
-        <a href="/" class="btn-secondary" style="text-decoration:none;">&larr; View Site</a>
+        <span id="form-heading">[+] Create New Post</span>
+        <a href="/" class="btn-secondary" style="text-decoration:none;">&larr; View Live Site</a>
+      </div>
+
+      <div id="editing-alert" class="editing-banner">
+        <span>Editing <strong id="editing-post-id"></strong></span>
+        <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Cancel Edit (New Post)</button>
       </div>
 
       <form id="post-form">
+        <input type="hidden" id="editing-id" value="">
+
         <div class="form-group">
           <label for="title">Title *</label>
           <input type="text" id="title" required placeholder="e.g. Ambient Sessions / Vol. 1">
@@ -193,20 +65,73 @@
 
         <div class="actions">
           <button type="submit" class="btn" id="submit-btn">Append Post to posts.json</button>
-          <a href="/" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">Cancel</a>
+          <button type="button" class="btn btn-secondary" id="reset-btn">Reset Form</button>
         </div>
       </form>
 
       <div id="status-box" class="status-msg"></div>
     </div>
+
+    <!-- Manage Existing Posts Section -->
+    <div class="admin-card">
+      <div class="admin-title">
+        <span>[&equiv;] Existing Entries in posts.json (<span id="post-count">0</span>)</span>
+        <button type="button" class="btn btn-secondary" id="refresh-posts-btn">&#x21bb; Reload</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="posts-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">ID</th>
+              <th style="width: 100px;">Date</th>
+              <th>Title</th>
+              <th style="width: 120px;">Tags</th>
+              <th style="width: 120px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="posts-list-body">
+            <tr>
+              <td colspan="5" style="text-align: center; color: var(--text-muted);">Loading posts...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // Default date to today
-    document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+    let currentPosts = [];
 
+    const form = document.getElementById('post-form');
+    const formHeading = document.getElementById('form-heading');
+    const editingIdInput = document.getElementById('editing-id');
+    const editingAlert = document.getElementById('editing-alert');
+    const editingPostIdSpan = document.getElementById('editing-post-id');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusBox = document.getElementById('status-box');
     const linksContainer = document.getElementById('links-container');
     const addLinkBtn = document.getElementById('add-link-btn');
+    const postsListBody = document.getElementById('posts-list-body');
+    const postCountSpan = document.getElementById('post-count');
+    const refreshPostsBtn = document.getElementById('refresh-posts-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    // Default date to today
+    function resetFormState() {
+      form.reset();
+      editingIdInput.value = '';
+      editingAlert.style.display = 'none';
+      formHeading.textContent = '[+] Create New Post';
+      submitBtn.textContent = 'Append Post to posts.json';
+      document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+      linksContainer.innerHTML = '';
+      statusBox.className = 'status-msg';
+    }
+
+    resetFormState();
 
     function createLinkRow(type = 'github', label = '', url = '') {
       const row = document.createElement('div');
@@ -218,27 +143,134 @@
           <option value="demo"${type === 'demo' ? ' selected' : ''}>Demo / Live</option>
           <option value="external"${type === 'external' ? ' selected' : ''}>External</option>
         </select>
-        <input type="text" class="link-label" placeholder="Button Label" value="${label}">
-        <input type="text" class="link-url" placeholder="https://..." value="${url}">
+        <input type="text" class="link-label" placeholder="Button Label" value="${escapeHtml(label)}">
+        <input type="text" class="link-url" placeholder="https://..." value="${escapeHtml(url)}">
         <button type="button" class="btn btn-danger remove-link" title="Remove">&times;</button>
       `;
       row.querySelector('.remove-link').addEventListener('click', () => row.remove());
       return row;
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
     addLinkBtn.addEventListener('click', () => {
       linksContainer.appendChild(createLinkRow());
     });
 
-    // Form submission
-    const form = document.getElementById('post-form');
-    const statusBox = document.getElementById('status-box');
-    const submitBtn = document.getElementById('submit-btn');
+    cancelEditBtn.addEventListener('click', resetFormState);
+    resetBtn.addEventListener('click', resetFormState);
 
+    // Fetch and render existing posts
+    async function loadPosts() {
+      try {
+        const res = await fetch('/content/posts.json?_t=' + Date.now());
+        if (!res.ok) throw new Error('Could not load posts.json');
+        currentPosts = await res.json();
+        renderPostsTable();
+      } catch (err) {
+        postsListBody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">Failed to load posts: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderPostsTable() {
+      postCountSpan.textContent = currentPosts.length;
+      if (currentPosts.length === 0) {
+        postsListBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No entries in posts.json</td></tr>`;
+        return;
+      }
+
+      postsListBody.innerHTML = currentPosts.map(post => {
+        const tags = (post.tags || []).join(', ');
+        return `
+          <tr data-id="${post.id}">
+            <td><span class="post-id-badge">${post.id}</span></td>
+            <td style="font-family: var(--font-mono); font-size: 0.8rem;">${post.date || ''}</td>
+            <td><strong>${escapeHtml(post.title)}</strong></td>
+            <td style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(tags)}</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn btn-edit" onclick="startEditPost('${post.id}')">Edit</button>
+                <button type="button" class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Populate form with post data for editing
+    window.startEditPost = function(postId) {
+      const post = currentPosts.find(p => p.id === postId);
+      if (!post) return;
+
+      editingIdInput.value = post.id;
+      document.getElementById('title').value = post.title || '';
+      document.getElementById('date').value = post.date || '';
+      document.getElementById('tags').value = (post.tags || []).join(', ');
+      document.getElementById('summary').value = post.summary || '';
+      document.getElementById('coverImage').value = post.coverImage || '';
+      document.getElementById('content').value = post.content || '';
+
+      // Links
+      linksContainer.innerHTML = '';
+      if (Array.isArray(post.links)) {
+        post.links.forEach(l => {
+          linksContainer.appendChild(createLinkRow(l.type, l.label, l.url));
+        });
+      }
+
+      formHeading.textContent = `[~] Edit Post (${post.id})`;
+      editingPostIdSpan.textContent = `${post.id} - "${post.title}"`;
+      editingAlert.style.display = 'flex';
+      submitBtn.textContent = `Save Changes to ${post.id}`;
+
+      // Scroll to form
+      document.getElementById('form-card').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Delete post
+    window.deletePost = async function(postId) {
+      const post = currentPosts.find(p => p.id === postId);
+      const title = post ? post.title : postId;
+      if (!confirm(`Are you sure you want to permanently delete "${title}" (${postId}) from posts.json?`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Delete failed');
+
+        statusBox.className = 'status-msg success';
+        statusBox.innerHTML = `&check; Post <strong>${postId}</strong> deleted successfully.`;
+
+        if (editingIdInput.value === postId) {
+          resetFormState();
+        }
+
+        await loadPosts();
+      } catch (err) {
+        statusBox.className = 'status-msg error';
+        statusBox.textContent = `Failed to delete post: ${err.message}`;
+      }
+    };
+
+    // Form submit (handles both Create and Update)
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       statusBox.className = 'status-msg';
       submitBtn.disabled = true;
+
+      const editingId = editingIdInput.value;
+      const isEditing = Boolean(editingId);
 
       // Collect links
       const links = [];
@@ -261,9 +293,12 @@
         links: links
       };
 
+      const endpoint = isEditing ? `/api/posts/${editingId}` : '/api/posts';
+      const method = isEditing ? 'PUT' : 'POST';
+
       try {
-        const res = await fetch('/api/posts', {
-          method: 'POST',
+        const res = await fetch(endpoint, {
+          method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
@@ -274,12 +309,12 @@
         }
 
         statusBox.className = 'status-msg success';
-        statusBox.innerHTML = `&check; Successfully created <strong>${data.post.id}</strong> ("${data.post.title}"). Added to <code>posts.json</code>!`;
-        
-        // Reset form
-        form.reset();
-        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
-        linksContainer.innerHTML = '';
+        statusBox.innerHTML = isEditing
+          ? `&check; Successfully updated <strong>${data.post.id}</strong> ("${data.post.title}")!`
+          : `&check; Successfully created <strong>${data.post.id}</strong> ("${data.post.title}")!`;
+
+        resetFormState();
+        await loadPosts();
       } catch (err) {
         statusBox.className = 'status-msg error';
         statusBox.textContent = `Error: ${err.message}`;
@@ -287,7 +322,11 @@
         submitBtn.disabled = false;
       }
     });
+
+    refreshPostsBtn.addEventListener('click', loadPosts);
+
+    // Initial load
+    loadPosts();
   </script>
 </body>
 </html>
-

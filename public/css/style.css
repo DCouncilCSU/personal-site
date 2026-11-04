@@ -1,3 +1,6 @@
+/* ==========================================================================
+   Base Design Tokens & Resets
+   ========================================================================== */
 :root {
   --bg-page: #f4f4f5;
   --bg-card: #ffffff;
@@ -10,15 +13,11 @@
   --text-invert: #ffffff;
 
   --accent: #2563eb;
-  --accent-hover: #1d4ed8;
   --badge-bg: #f4f4f5;
   --badge-text: #27272a;
 
   --font-mono: "Courier Prime", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
-  --radius: 0px;
-  /* Set to 6px or 8px if you prefer rounded edges */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -50,6 +49,93 @@ body {
   padding: 0;
 }
 
+@media (min-width: 768px) {
+  body {
+    padding: 24px 16px;
+  }
+}
+
+/* ==========================================================================
+   Shared Form Controls & Buttons
+   ========================================================================== */
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: var(--border-width) solid var(--border-color);
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+textarea {
+  font-family: var(--font-mono);
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  background: var(--bg-card);
+}
+
+.btn,
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  border: var(--border-width) solid var(--border-color);
+  background: var(--text-main);
+  color: var(--text-invert);
+  transition: opacity 0.15s ease;
+}
+
+.btn:hover,
+.btn-link:hover {
+  opacity: 0.85;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-main);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border-color: #b91c1c;
+}
+
+.btn-edit {
+  background: var(--accent);
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+.tag-badge {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  border: 1px solid var(--border-color);
+  text-transform: lowercase;
+}
+
+/* ==========================================================================
+   Public Site Layout & Components
+   ========================================================================== */
 .site-wrapper {
   width: 100%;
   max-width: 760px;
@@ -62,13 +148,9 @@ body {
 }
 
 @media (min-width: 768px) {
-  body {
-    padding: 24px 16px;
-  }
-
   .site-wrapper {
     border: var(--border-width) solid var(--border-color);
-    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-color);
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--border-color);
     min-height: auto;
   }
 }
@@ -76,7 +158,6 @@ body {
 /* Header & Banner */
 .site-header {
   border-bottom: var(--border-width) solid var(--border-color);
-  position: relative;
   background-color: #09090b;
 }
 
@@ -131,10 +212,9 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Nav / Links Bar */
+/* Navigation */
 .nav-bar {
   background-color: var(--bg-page);
-  color: var(--text-invert);
   padding: 10px 20px;
   display: flex;
   flex-wrap: wrap;
@@ -151,15 +231,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: opacity 0.15s ease;
 }
 
 .nav-link:hover {
   text-decoration: underline;
-  opacity: 0.85;
 }
 
-/* Bio Section */
+/* Bio & Main Feed */
 .bio-section {
   padding: 20px;
   border-bottom: 1px dashed var(--border-color);
@@ -167,7 +245,6 @@ body {
   color: var(--text-muted);
 }
 
-/* Main Content Area */
 main {
   flex-grow: 1;
   padding: 24px 20px;
@@ -182,7 +259,6 @@ main {
   margin-bottom: 20px;
 }
 
-/* Post Cards */
 .posts-feed {
   display: flex;
   flex-direction: column;
@@ -193,11 +269,10 @@ main {
   border: var(--border-width) solid var(--border-color);
   background: var(--bg-card);
   padding: 20px;
-  position: relative;
 }
 
 .post-card:hover {
-  box-shadow: 2px 2px 0px var(--border-color);
+  box-shadow: 2px 2px 0 var(--border-color);
 }
 
 .post-meta {
@@ -219,15 +294,6 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-}
-
-.tag-badge {
-  background: var(--badge-bg);
-  color: var(--badge-text);
-  padding: 2px 6px;
-  font-size: 0.7rem;
-  border: 1px solid var(--border-color);
-  text-transform: lowercase;
 }
 
 .post-title {
@@ -253,7 +319,6 @@ main {
   margin-bottom: 16px;
 }
 
-/* Post Action Links (SoundCloud, GitHub, etc.) */
 .post-links {
   display: flex;
   flex-wrap: wrap;
@@ -264,18 +329,10 @@ main {
 }
 
 .btn-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 6px 12px;
-  text-decoration: none;
-  border: var(--border-width) solid var(--border-color);
   background: var(--bg-card);
   color: var(--text-main);
-  transition: all 0.15s ease;
+  padding: 6px 12px;
+  font-size: 0.8rem;
 }
 
 .btn-link:hover {

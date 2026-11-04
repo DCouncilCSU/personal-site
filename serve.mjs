@@ -95,9 +95,93 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Admin UI route (local dev only, served from admin/ outside public/)
+  // API: Update an existing post
+  if (req.method === "PUT" && pathname.startsWith("/api/posts/")) {
+    const postId = pathname.replace("/api/posts/", "");
+    let body = "";
+    req.on("data", chunk => {
+      body += chunk;
+      if (body.length > 2e6) req.destroy();
+    });
+
+    req.on("end", () => {
+      try {
+        const updateData = JSON.parse(body);
+        if (!updateData.title || typeof updateData.title !== "string") {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: "Title is required" }));
+        }
+
+        const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
+        const posts = JSON.parse(rawPosts);
+        const index = posts.findIndex(p => p.id === postId);
+
+        if (index === -1) {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: `Post with ID "${postId}" not found` }));
+        }
+
+        const updatedEntry = {
+          id: postId,
+          title: updateData.title.trim(),
+          date: updateData.date || posts[index].date,
+          tags: Array.isArray(updateData.tags)
+            ? updateData.tags
+            : (updateData.tags || "")
+                .split(",")
+                .map(t => t.trim().toLowerCase())
+                .filter(Boolean),
+          summary: (updateData.summary || "").trim(),
+          content: (updateData.content || "").trim(),
+          coverImage: updateData.coverImage ? updateData.coverImage.trim() : null,
+          links: Array.isArray(updateData.links) ? updateData.links : []
+        };
+
+        posts[index] = updatedEntry;
+        fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2) + "\n", "utf-8");
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ success: true, post: updatedEntry }));
+      } catch (err) {
+        console.error("Failed to update post:", err);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Internal server error updating post" }));
+      }
+    });
+    return;
+  }
+
+  // API: Delete a post
+  if (req.method === "DELETE" && pathname.startsWith("/api/posts/")) {
+    const postId = pathname.replace("/api/posts/", "");
+    try {
+      const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
+      const posts = JSON.parse(rawPosts);
+      const index = posts.findIndex(p => p.id === postId);
+
+      if (index === -1) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: `Post with ID "${postId}" not found` }));
+      }
+
+      const removed = posts.splice(index, 1)[0];
+      fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2) + "\n", "utf-8");
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ success: true, removedPost: removed }));
+    } catch (err) {
+      console.error("Failed to delete post:", err);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Internal server error deleting post" }));
+    }
+  }
+
+  // Admin UI routes (local dev only, served from admin/ outside public/)
   if (pathname === "/admin" || pathname === "/admin/" || pathname === "/admin/index.html") {
     return serveFile(path.join(ADMIN_DIR, "index.html"), 200, res);
+  }
+  if (pathname === "/admin/admin.css") {
+    return serveFile(path.join(ADMIN_DIR, "admin.css"), 200, res);
   }
 
   // Default to index.html
