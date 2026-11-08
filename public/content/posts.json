@@ -1,5 +1,18 @@
 [
   {
+    "id": "post-5",
+    "title": "First Post On davidcouncil.com",
+    "date": "2026-11-08",
+    "tags": [
+      "dns",
+      "custom domain"
+    ],
+    "summary": "Got my DNS issues sorted",
+    "content": "Took me a couple of days of trying things, waiting for DNS propagation, discovering my settings were wrong, etc. but I finally got davidcouncil.com linked to this new app hosted on Firebase/GCP!\n\nNext steps will be:\nIroning out wrinkles in the content editor\nCreating a more dynamic way to link SoundCloud content\nFinding my RCA cords lost at RaveYard and get back to mixing",
+    "coverImage": null,
+    "links": []
+  },
+  {
     "id": "post-4",
     "title": "Testing the Content Editor",
     "date": "2026-11-04",
