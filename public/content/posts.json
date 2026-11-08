@@ -1,5 +1,18 @@
 [
   {
+    "id": "post-6",
+    "title": "One More Tweak",
+    "date": "2026-11-08",
+    "tags": [
+      "naked",
+      "domain"
+    ],
+    "summary": "Fixed DNS for www subdomain.... hopefully",
+    "content": "Had to make one more adjustment to the Firebase configuration, it treats www.davidcouncil.com and davidcouncil.com as unique domains and needed configuration as such. We will see if this fixes it.",
+    "coverImage": null,
+    "links": []
+  },
+  {
     "id": "post-5",
     "title": "First Post On davidcouncil.com",
     "date": "2026-11-08",
