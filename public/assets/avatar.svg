@@ -27,17 +27,17 @@
   <!-- Head & Face -->
   <g id="head">
     <!-- Ears -->
-    <ellipse cx="61" cy="98" rx="6" ry="11" fill="#fed7aa" class="stroke-main"/>
-    <ellipse cx="139" cy="98" rx="6" ry="11" fill="#fed7aa" class="stroke-main"/>
-    <path d="M 61 95 Q 64 99 61 103" fill="none" class="stroke-detail"/>
-    <path d="M 139 95 Q 136 99 139 103" fill="none" class="stroke-detail"/>
+    <ellipse cx="66" cy="98" rx="5.5" ry="11" fill="#fed7aa" class="stroke-main"/>
+    <ellipse cx="134" cy="98" rx="5.5" ry="11" fill="#fed7aa" class="stroke-main"/>
+    <path d="M 66 95 Q 69 99 66 103" fill="none" class="stroke-detail"/>
+    <path d="M 134 95 Q 131 99 134 103" fill="none" class="stroke-detail"/>
 
-    <!-- Face Base (Elongated, gentle taper down to chin) -->
-    <path d="M 70 65 
-             C 62 82 63 118 72 134 
-             C 80 148 120 148 128 134 
-             C 137 118 138 82 130 65 
-             C 122 50 78 50 70 65 Z" 
+    <!-- Face Base (Thinner, slender elongated contour) -->
+    <path d="M 74 65 
+             C 67 82 68 118 76 134 
+             C 83 148 117 148 124 134 
+             C 132 118 133 82 126 65 
+             C 119 50 81 50 74 65 Z" 
           fill="#fed7aa" class="stroke-main"/>
 
     <!-- Eyes (Forward gaze, brown iris with catchlight) -->
@@ -62,24 +62,24 @@
     <!-- Subtle Cheek Stubble Stippling -->
     <g id="stubble" fill="#262626">
       <!-- Left cheek & jaw stipple dots -->
-      <circle cx="74" cy="114" r="0.85"/>
-      <circle cx="78" cy="110" r="0.75"/>
-      <circle cx="82" cy="115" r="0.8"/>
-      <circle cx="75" cy="122" r="0.75"/>
-      <circle cx="80" cy="124" r="0.85"/>
-      <circle cx="76" cy="130" r="0.8"/>
-      <circle cx="82" cy="132" r="0.75"/>
-      <circle cx="84" cy="126" r="0.7"/>
+      <circle cx="77" cy="114" r="0.85"/>
+      <circle cx="80" cy="110" r="0.75"/>
+      <circle cx="83" cy="115" r="0.8"/>
+      <circle cx="78" cy="122" r="0.75"/>
+      <circle cx="82" cy="124" r="0.85"/>
+      <circle cx="79" cy="130" r="0.8"/>
+      <circle cx="84" cy="132" r="0.75"/>
+      <circle cx="85" cy="126" r="0.7"/>
 
       <!-- Right cheek & jaw stipple dots -->
-      <circle cx="126" cy="114" r="0.85"/>
-      <circle cx="122" cy="110" r="0.75"/>
-      <circle cx="118" cy="115" r="0.8"/>
-      <circle cx="125" cy="122" r="0.75"/>
-      <circle cx="120" cy="124" r="0.85"/>
-      <circle cx="124" cy="130" r="0.8"/>
-      <circle cx="118" cy="132" r="0.75"/>
-      <circle cx="116" cy="126" r="0.7"/>
+      <circle cx="123" cy="114" r="0.85"/>
+      <circle cx="120" cy="110" r="0.75"/>
+      <circle cx="117" cy="115" r="0.8"/>
+      <circle cx="122" cy="122" r="0.75"/>
+      <circle cx="118" cy="124" r="0.85"/>
+      <circle cx="121" cy="130" r="0.8"/>
+      <circle cx="116" cy="132" r="0.75"/>
+      <circle cx="115" cy="126" r="0.7"/>
     </g>
 
     <!-- Goatee & Mustache (Neat, compact, focused around chin & mouth) -->
