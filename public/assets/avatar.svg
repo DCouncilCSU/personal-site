@@ -102,16 +102,15 @@
     <!-- Subtle lower lip shadow -->
     <path d="M 95 127 Q 100 128 105 127" fill="none" stroke="#e0a07e" stroke-width="2" stroke-linecap="round"/>
 
-    <!-- Dark Shaggy Hair (Frontal bangs swept across forehead) -->
-    <path d="M 64 80 
-             C 58 52 70 28 100 28 
-             C 130 28 142 52 136 80 
-             C 142 86 141 106 135 112 
-             C 133 98 135 84 131 76 
+    <!-- Dark Shaggy Hair (Frontal bangs swept across forehead, trimmed above ears, snug to left temple) -->
+    <path d="M 67 78 
+             C 60 52 70 28 100 28 
+             C 130 28 142 52 136 78 
+             C 135 84 133 86 130 84 
              C 126 62 118 64 110 68 
              C 102 72 90 62 78 68 
-             C 72 73 69 90 65 112 
-             C 59 106 58 86 64 80 Z" 
+             C 74 64 73 76 72 84 
+             C 69 86 67 84 67 78 Z" 
           fill="#18181b" class="stroke-main"/>
 
     <!-- Hair Texture / Swept Bangs Details -->
