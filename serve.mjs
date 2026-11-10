@@ -2,12 +2,15 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createPostStore, PostStoreError } from "./post-store.mjs";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, "public");
 const ADMIN_DIR = path.join(__dirname, "admin");
 const POSTS_FILE = path.join(PUBLIC_DIR, "content", "posts.json");
 const PORT = process.env.PORT || 8080;
+const postStore = createPostStore(POSTS_FILE);
 
 // Auto-load .env if present
 function loadEnv() {
@@ -37,25 +40,6 @@ let scTokenCache = {
   accessToken: null,
   expiresAt: 0
 };
-
-// Central helper: sort descending by date, renumber post-1..post-N, and save
-function saveAndNormalizePosts(posts) {
-  // Sort chronologically descending (newest date first)
-  posts.sort((a, b) => {
-    const dateA = a.date || "";
-    const dateB = b.date || "";
-    return dateB.localeCompare(dateA);
-  });
-
-  // Renumber sequentially: post-1 at bottom, post-N at top
-  const total = posts.length;
-  posts.forEach((post, index) => {
-    post.id = `post-${total - index}`;
-  });
-
-  fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2) + "\n", "utf-8");
-  return posts;
-}
 
 async function getSoundCloudToken(clientId, clientSecret) {
   const now = Date.now();
@@ -101,143 +85,12 @@ const MIME_TYPES = {
   ".md": "text/markdown; charset=utf-8"
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   // Strip query strings and hash
   const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // API endpoint to create a new post
-  if (req.method === "POST" && pathname === "/api/posts") {
-    let body = "";
-    req.on("data", chunk => {
-      body += chunk;
-      if (body.length > 2e6) {
-        req.destroy();
-      }
-    });
-
-    req.on("end", () => {
-      try {
-        const newPostData = JSON.parse(body);
-
-        if (!newPostData.title || typeof newPostData.title !== "string") {
-          res.writeHead(400, { "Content-Type": "application/json" });
-          return res.end(JSON.stringify({ error: "Title is required" }));
-        }
-
-        const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
-        const posts = JSON.parse(rawPosts);
-
-        const postEntry = {
-          id: "", // Will be assigned during saveAndNormalizePosts
-          title: newPostData.title.trim(),
-          date: newPostData.date || new Date().toISOString().slice(0, 10),
-          tags: Array.isArray(newPostData.tags)
-            ? newPostData.tags
-            : (newPostData.tags || "")
-              .split(",")
-              .map(t => t.trim().toLowerCase())
-              .filter(Boolean),
-          summary: (newPostData.summary || "").trim(),
-          content: (newPostData.content || "").trim(),
-          coverImage: newPostData.coverImage ? newPostData.coverImage.trim() : null,
-          links: Array.isArray(newPostData.links) ? newPostData.links : []
-        };
-
-        posts.push(postEntry);
-        saveAndNormalizePosts(posts);
-
-        res.writeHead(201, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ success: true, post: postEntry }));
-      } catch (err) {
-        console.error("Failed to save post:", err);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "Internal server error saving post" }));
-      }
-    });
-    return;
-  }
-
-  // API: Update an existing post
-  if (req.method === "PUT" && pathname.startsWith("/api/posts/")) {
-    const postId = pathname.replace("/api/posts/", "");
-    let body = "";
-    req.on("data", chunk => {
-      body += chunk;
-      if (body.length > 2e6) req.destroy();
-    });
-
-    req.on("end", () => {
-      try {
-        const updateData = JSON.parse(body);
-        if (!updateData.title || typeof updateData.title !== "string") {
-          res.writeHead(400, { "Content-Type": "application/json" });
-          return res.end(JSON.stringify({ error: "Title is required" }));
-        }
-
-        const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
-        const posts = JSON.parse(rawPosts);
-        const index = posts.findIndex(p => p.id === postId);
-
-        if (index === -1) {
-          res.writeHead(404, { "Content-Type": "application/json" });
-          return res.end(JSON.stringify({ error: `Post with ID "${postId}" not found` }));
-        }
-
-        const updatedEntry = {
-          id: postId,
-          title: updateData.title.trim(),
-          date: updateData.date || posts[index].date,
-          tags: Array.isArray(updateData.tags)
-            ? updateData.tags
-            : (updateData.tags || "")
-              .split(",")
-              .map(t => t.trim().toLowerCase())
-              .filter(Boolean),
-          summary: (updateData.summary || "").trim(),
-          content: (updateData.content || "").trim(),
-          coverImage: updateData.coverImage ? updateData.coverImage.trim() : null,
-          links: Array.isArray(updateData.links) ? updateData.links : []
-        };
-
-        posts[index] = updatedEntry;
-        saveAndNormalizePosts(posts);
-
-        res.writeHead(200, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ success: true, post: updatedEntry }));
-      } catch (err) {
-        console.error("Failed to update post:", err);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "Internal server error updating post" }));
-      }
-    });
-    return;
-  }
-
-  // API: Delete a post
-  if (req.method === "DELETE" && pathname.startsWith("/api/posts/")) {
-    const postId = pathname.replace("/api/posts/", "");
-    try {
-      const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
-      const posts = JSON.parse(rawPosts);
-      const index = posts.findIndex(p => p.id === postId);
-
-      if (index === -1) {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: `Post with ID "${postId}" not found` }));
-      }
-
-      const removed = posts.splice(index, 1)[0];
-      saveAndNormalizePosts(posts);
-
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ success: true, removedPost: removed }));
-    } catch (err) {
-      console.error("Failed to delete post:", err);
-      res.writeHead(500, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ error: "Internal server error deleting post" }));
-    }
-  }
+  if (await handlePostApi(req, res, pathname)) return;
 
   // API: Sync tracks from SoundCloud profile
   if (req.method === "POST" && pathname === "/api/soundcloud/sync") {
@@ -306,21 +159,13 @@ const server = http.createServer((req, res) => {
         });
 
         // 4. Check existing posts.json for duplicates
-        const rawPosts = fs.readFileSync(POSTS_FILE, "utf-8");
-        const posts = JSON.parse(rawPosts);
+        const posts = postStore.list();
 
         // Map existing post URLs & titles
         const existingSoundCloudUrls = new Set();
         const existingTitles = new Set();
-        let maxIndex = 0;
 
         for (const post of posts) {
-          if (post.id && post.id.startsWith("post-")) {
-            const num = parseInt(post.id.replace("post-", ""), 10);
-            if (!isNaN(num) && num > maxIndex) {
-              maxIndex = num;
-            }
-          }
           if (post.title) existingTitles.add(post.title.trim().toLowerCase());
           if (Array.isArray(post.links)) {
             for (const link of post.links) {
@@ -387,8 +232,8 @@ const server = http.createServer((req, res) => {
           if (title) existingTitles.add(title.toLowerCase());
         }
 
-        // Always sort and renumber on every sync, so new tracks land in the right chronological slot
-        saveAndNormalizePosts(posts);
+        // Keep SoundCloud imports on the same persistence path as CRUD.
+        const savedAddedPosts = postStore.append(addedPosts);
 
         res.writeHead(200, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({
@@ -396,7 +241,7 @@ const server = http.createServer((req, res) => {
           totalFetched: tracksList.length,
           last30DaysCount: recentTracks.length,
           addedCount: addedPosts.length,
-          addedPosts: addedPosts
+          addedPosts: savedAddedPosts
         }));
       } catch (err) {
         console.error("SoundCloud sync error:", err);
@@ -443,6 +288,87 @@ const server = http.createServer((req, res) => {
     serveFile(filePath, 200, res);
   });
 });
+
+async function handlePostApi(req, res, pathname) {
+  const isCollectionPath = pathname === "/api/posts";
+  const postMatch = pathname.match(/^\/api\/posts\/([^/]+)$/);
+  if (!isCollectionPath && !postMatch && !pathname.startsWith("/api/posts/")) {
+    return false;
+  }
+
+  try {
+    if (isCollectionPath && req.method === "GET") {
+      sendJson(res, 200, postStore.list());
+      return true;
+    }
+    if (isCollectionPath && req.method === "POST") {
+      const post = postStore.create(await readJsonBody(req));
+      sendJson(res, 201, { success: true, post });
+      return true;
+    }
+    if (postMatch && req.method === "PUT") {
+      const post = postStore.update(postMatch[1], await readJsonBody(req));
+      sendJson(res, 200, { success: true, post });
+      return true;
+    }
+    if (postMatch && req.method === "DELETE") {
+      const removedPost = postStore.remove(postMatch[1]);
+      sendJson(res, 200, { success: true, removedPost });
+      return true;
+    }
+    sendJson(res, 405, { error: "Method not allowed" });
+    return true;
+  } catch (error) {
+    if (error.statusCode === 400 || error.statusCode === 404 || error.statusCode === 413) {
+      sendJson(res, error.statusCode, { error: error.message });
+      return true;
+    }
+    if (error instanceof PostStoreError && error.statusCode < 500) {
+      sendJson(res, error.statusCode, { error: error.message });
+      return true;
+    }
+    console.error("Post API error:", error);
+    sendJson(res, 500, { error: "Internal server error handling post request" });
+    return true;
+  }
+}
+
+async function readJsonBody(req) {
+  const chunks = [];
+  let size = 0;
+  let tooLarge = false;
+
+  for await (const chunk of req) {
+    size += chunk.length;
+    if (size > 2e6) {
+      tooLarge = true;
+    } else if (!tooLarge) {
+      chunks.push(chunk);
+    }
+  }
+
+  if (tooLarge) {
+    const error = new Error("Request body is too large");
+    error.statusCode = 413;
+    throw error;
+  }
+
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString("utf-8"));
+  } catch {
+    const error = new Error("Request body must contain valid JSON");
+    error.statusCode = 400;
+    throw error;
+  }
+}
+
+function sendJson(res, statusCode, data) {
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-cache"
+  });
+  res.end(JSON.stringify(data));
+}
 
 function serveFile(filePath, statusCode, res) {
   const ext = path.extname(filePath).toLowerCase();

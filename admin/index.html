@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/admin/admin.css">
 </head>
+
 <body>
   <div class="admin-container">
 
@@ -19,7 +21,8 @@
 
       <div id="editing-alert" class="editing-banner">
         <span>Editing <strong id="editing-post-id"></strong></span>
-        <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Cancel Edit (New Post)</button>
+        <button type="button" class="btn btn-secondary" id="cancel-edit-btn"
+          style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Cancel Edit (New Post)</button>
       </div>
 
       <form id="post-form">
@@ -39,7 +42,8 @@
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
               <label for="date" style="margin-bottom: 0;">Date</label>
-              <button type="button" id="toggle-date-lock" class="btn btn-secondary" style="padding: 0.1rem 0.4rem; font-size: 0.7rem; height: auto;" title="Unlock to change date">
+              <button type="button" id="toggle-date-lock" class="btn btn-secondary"
+                style="padding: 0.1rem 0.4rem; font-size: 0.7rem; height: auto;" title="Unlock to change date">
                 &#128274; Locked
               </button>
             </div>
@@ -66,7 +70,8 @@
         <div class="form-group">
           <label>External Links</label>
           <div id="links-container"></div>
-          <button type="button" class="btn btn-secondary" id="add-link-btn" style="margin-top:0.3rem;">+ Add Link</button>
+          <button type="button" class="btn btn-secondary" id="add-link-btn" style="margin-top:0.3rem;">+ Add
+            Link</button>
         </div>
 
         <div class="actions">
@@ -83,7 +88,8 @@
       <div class="admin-title">
         <span>[&equiv;] Existing Entries in posts.json (<span id="post-count">0</span>)</span>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
-          <button type="button" class="btn btn-secondary" id="sync-sc-btn" title="Fetch tracks created in the last 30 days from your SoundCloud profile">
+          <button type="button" class="btn btn-secondary" id="sync-sc-btn"
+            title="Fetch tracks created in the last 30 days from your SoundCloud profile">
             &#9835; Sync SoundCloud Tracks
           </button>
           <button type="button" class="btn btn-secondary" id="refresh-posts-btn">&#x21bb; Reload</button>
@@ -209,7 +215,7 @@
     // Fetch and render existing posts
     async function loadPosts() {
       try {
-        const res = await fetch('/content/posts.json?_t=' + Date.now());
+        const res = await fetch('/api/posts?_t=' + Date.now());
         if (!res.ok) throw new Error('Could not load posts.json');
         currentPosts = await res.json();
         renderPostsTable();
@@ -245,7 +251,7 @@
     }
 
     // Populate form with post data for editing
-    window.startEditPost = function(postId) {
+    window.startEditPost = function (postId) {
       const post = currentPosts.find(p => p.id === postId);
       if (!post) return;
 
@@ -275,7 +281,7 @@
     };
 
     // Delete post
-    window.deletePost = async function(postId) {
+    window.deletePost = async function (postId) {
       const post = currentPosts.find(p => p.id === postId);
       const title = post ? post.title : postId;
       if (!confirm(`Are you sure you want to permanently delete "${title}" (${postId}) from posts.json?`)) {
@@ -400,4 +406,5 @@
     loadPosts();
   </script>
 </body>
+
 </html>
