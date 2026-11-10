@@ -1,5 +1,17 @@
 [
   {
+    "id": "post-8",
+    "title": "Testing New Post Store",
+    "date": "2026-11-10",
+    "tags": [
+      "development"
+    ],
+    "summary": "A Post Store object",
+    "content": "A standardized Post Store object, to handle all the CRUD operations for Posts and simplify the serve.mjs file. More error handling for URIs. A local Node test suite for the Post Store.",
+    "coverImage": null,
+    "links": []
+  },
+  {
     "id": "post-7",
     "title": "One More Tweak",
     "date": "2026-11-08",
