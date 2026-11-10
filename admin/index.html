@@ -37,8 +37,14 @@
             <span class="hint">Comma-separated</span>
           </div>
           <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" id="date">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <label for="date" style="margin-bottom: 0;">Date</label>
+              <button type="button" id="toggle-date-lock" class="btn btn-secondary" style="padding: 0.1rem 0.4rem; font-size: 0.7rem; height: auto;" title="Unlock to change date">
+                &#128274; Locked
+              </button>
+            </div>
+            <input type="date" id="date" readonly>
+            <span class="hint" id="date-hint">Locked to prevent accidental reordering</span>
           </div>
         </div>
 
@@ -76,7 +82,12 @@
     <div class="admin-card">
       <div class="admin-title">
         <span>[&equiv;] Existing Entries in posts.json (<span id="post-count">0</span>)</span>
-        <button type="button" class="btn btn-secondary" id="refresh-posts-btn">&#x21bb; Reload</button>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button type="button" class="btn btn-secondary" id="sync-sc-btn" title="Fetch tracks created in the last 30 days from your SoundCloud profile">
+            &#9835; Sync SoundCloud Tracks
+          </button>
+          <button type="button" class="btn btn-secondary" id="refresh-posts-btn">&#x21bb; Reload</button>
+        </div>
       </div>
 
       <div style="overflow-x: auto;">
@@ -118,6 +129,32 @@
     const postCountSpan = document.getElementById('post-count');
     const refreshPostsBtn = document.getElementById('refresh-posts-btn');
     const resetBtn = document.getElementById('reset-btn');
+    const dateInput = document.getElementById('date');
+    const toggleDateLockBtn = document.getElementById('toggle-date-lock');
+    const dateHint = document.getElementById('date-hint');
+
+    function setDateLock(locked) {
+      dateInput.readOnly = locked;
+      if (locked) {
+        toggleDateLockBtn.innerHTML = '&#128274; Locked';
+        toggleDateLockBtn.title = 'Unlock to change date';
+        dateHint.textContent = 'Locked to prevent accidental reordering';
+      } else {
+        toggleDateLockBtn.innerHTML = '&#128275; Unlocked';
+        toggleDateLockBtn.title = 'Lock date field';
+        dateHint.textContent = 'Unlocked: editing date will reorder posts';
+      }
+    }
+
+    toggleDateLockBtn.addEventListener('click', () => {
+      setDateLock(!dateInput.readOnly);
+    });
+
+    dateInput.addEventListener('click', () => {
+      if (dateInput.readOnly) {
+        dateInput.blur();
+      }
+    });
 
     // Default date to today
     function resetFormState() {
@@ -126,7 +163,8 @@
       editingAlert.style.display = 'none';
       formHeading.textContent = '[+] Create New Post';
       submitBtn.textContent = 'Append Post to posts.json';
-      document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+      dateInput.value = new Date().toISOString().slice(0, 10);
+      setDateLock(true);
       linksContainer.innerHTML = '';
       statusBox.className = 'status-msg';
     }
@@ -324,6 +362,39 @@
     });
 
     refreshPostsBtn.addEventListener('click', loadPosts);
+
+    // Sync tracks from SoundCloud
+    const syncScBtn = document.getElementById('sync-sc-btn');
+    syncScBtn.addEventListener('click', async () => {
+      if (syncScBtn.disabled) return;
+      const origText = syncScBtn.textContent;
+      syncScBtn.disabled = true;
+      syncScBtn.textContent = 'Syncing...';
+      statusBox.className = 'status-msg';
+
+      try {
+        const res = await fetch('/api/soundcloud/sync', { method: 'POST' });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to sync tracks');
+        }
+
+        statusBox.className = 'status-msg success';
+        if (data.addedCount > 0) {
+          statusBox.innerHTML = `&check; Synced SoundCloud! Added <strong>${data.addedCount}</strong> new track(s) from the last 30 days to <code>posts.json</code>.`;
+        } else {
+          statusBox.innerHTML = `&check; SoundCloud is up to date (${data.last30DaysCount} track(s) in last 30 days, 0 new additions).`;
+        }
+        await loadPosts();
+      } catch (err) {
+        statusBox.className = 'status-msg error';
+        statusBox.textContent = `SoundCloud Sync Error: ${err.message}`;
+      } finally {
+        syncScBtn.disabled = false;
+        syncScBtn.textContent = origText;
+      }
+    });
 
     // Initial load
     loadPosts();
