@@ -370,7 +370,7 @@ const server = http.createServer((req, res) => {
             summary: track.description
               ? (track.description.split("\n")[0].slice(0, 140) + (track.description.length > 140 ? "..." : ""))
               : `New release on SoundCloud: ${title}`,
-            content: track.description ? track.description.split('\n').slice(0, 10).join('\n') : `Listen to ${title} on SoundCloud.`,
+            content: track.description ? track.description.split('\n').slice(0, 10).concat(['...']).join('\n') : `Listen to ${title} on SoundCloud.`,
             coverImage: artwork,
             links: [
               {
