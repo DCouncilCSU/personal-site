@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node --env-file=.env serve.mjs",
+    "test": "node --test",
     "deploy": "firebase deploy --only hosting"
   },
   "keywords": [
