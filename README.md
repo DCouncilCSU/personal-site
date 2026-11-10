@@ -37,6 +37,12 @@ npm start
 
 ---
 
+### SoundCloud Sync
+- **1-Click Sync in Admin Panel:** Click `♬ Sync SoundCloud Tracks` in the local admin panel (`/admin`) to fetch tracks published in the last 30 days from your SoundCloud profile and automatically append them to `public/content/posts.json` if not already present.
+- **Local-only credentials:** Configure `SC_CLIENT_ID`, `SC_CLIENT_SECRET`, and `SC_PROFILE_URI` in `.env`. Credentials stay on your local machine and are never deployed to Firebase Hosting.
+
+---
+
 ## How to Customize
 
 ### 1. Personal Info & Links
@@ -64,6 +70,13 @@ Open `public/css/style.css`. All colors, fonts, border widths, and shadows are e
   ...
 }
 ```
+
+### 4. SoundCloud API
+A builtin integration with SoundCloud can be run from the terminal:
+```bash
+npm run soundcloud
+```
+- **SoundCloud API credentials:** The `SoundCloud` key in `.env` is only used by the local Node.js server (`serve.mjs`) and is not deployed to Firebase Hosting.
 
 ---
 

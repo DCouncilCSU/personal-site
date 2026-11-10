@@ -4,10 +4,14 @@
   "description": "Personal blog and project portfolio hosted on GCP Firebase",
   "type": "module",
   "scripts": {
-    "start": "node serve.mjs",
+    "start": "node --env-file=.env serve.mjs",
     "deploy": "firebase deploy --only hosting"
   },
-  "keywords": ["firebase", "blog", "portfolio"],
+  "keywords": [
+    "firebase",
+    "blog",
+    "portfolio"
+  ],
   "author": "",
   "license": "MIT"
 }
