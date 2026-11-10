@@ -387,9 +387,8 @@ const server = http.createServer((req, res) => {
           if (title) existingTitles.add(title.toLowerCase());
         }
 
-        if (addedPosts.length > 0) {
-          saveAndNormalizePosts(posts);
-        }
+        // Always sort and renumber on every sync, so new tracks land in the right chronological slot
+        saveAndNormalizePosts(posts);
 
         res.writeHead(200, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({
