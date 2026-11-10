@@ -72,10 +72,7 @@ Open `public/css/style.css`. All colors, fonts, border widths, and shadows are e
 ```
 
 ### 4. SoundCloud API
-A builtin integration with SoundCloud can be run from the terminal:
-```bash
-npm run soundcloud
-```
+A builtin integration with SoundCloud can be run from the admin panel.
 - **SoundCloud API credentials:** The `SoundCloud` key in `.env` is only used by the local Node.js server (`serve.mjs`) and is not deployed to Firebase Hosting.
 
 ---
@@ -116,4 +113,3 @@ Your site will instantly be live at `https://<your-project-id>.web.app` and `htt
 
 
 ## Future Enhancements
-1. Integrate with SoundCloud API for track listing
