@@ -1,6 +1,6 @@
 [
   {
-    "id": "post-6",
+    "id": "post-7",
     "title": "One More Tweak",
     "date": "2026-11-08",
     "tags": [
@@ -13,7 +13,7 @@
     "links": []
   },
   {
-    "id": "post-5",
+    "id": "post-6",
     "title": "First Post On davidcouncil.com",
     "date": "2026-11-08",
     "tags": [
@@ -26,7 +26,7 @@
     "links": []
   },
   {
-    "id": "post-4",
+    "id": "post-5",
     "title": "Testing the Content Editor",
     "date": "2026-11-04",
     "tags": [],
@@ -47,22 +47,65 @@
     ]
   },
   {
-    "id": "post-3",
-    "title": "Raveyard Practice",
-    "date": "2026-10-15",
+    "id": "post-4",
+    "title": "The Professor's RaveYard",
+    "date": "2026-11-01",
     "tags": [
       "audio",
-      "mixtape",
-      "soundcloud"
+      "soundcloud",
+      "dance & edm",
+      "halloween",
+      "empire grange"
     ],
-    "summary": "The set that never was",
-    "content": "",
-    "coverImage": "https://i1.sndcdn.com/avatars-BnGHV2Qz3MiyjsbY-KrqrhA-t500x500.jpg",
+    "summary": "The Professor's Debut for RaveYard 2026 at the glorious Empire Grange....",
+    "content": "The Professor's Debut for RaveYard 2026 at the glorious Empire Grange.\n\nTracklist:\n&ME & Black Coffee - The Rapture Pt III\nKaz James - Sun Is Shining\nGorje Hewek & Dulus - Celestial\nHercules & Love Affair - Blink (Frankie Knuckles Remix)\nNic Fanciulli - Werk (Move Your Body)\nHercules & Love Affair - My House (Tensnake Remix)\nJT Donaldson - Take A Ride",
+    "coverImage": "https://i1.sndcdn.com/artworks-n3yUVKbQk6jNFtWw-vzSarw-t500x500.jpg",
     "links": [
       {
         "type": "soundcloud",
         "label": "Listen on SoundCloud",
-        "url": "https://soundcloud.com/dcouncil/raveyard-practice"
+        "url": "https://soundcloud.com/dcouncil/the-professors-raveyard?utm_medium=api&utm_campaign=social_sharing&utm_source=id_338842"
+      }
+    ]
+  },
+  {
+    "id": "post-3",
+    "title": "RaveYard Practice",
+    "date": "2026-10-30",
+    "tags": [
+      "audio",
+      "soundcloud"
+    ],
+    "summary": "test run for saturday",
+    "content": "test run for saturday",
+    "coverImage": null,
+    "links": [
+      {
+        "type": "soundcloud",
+        "label": "Listen on SoundCloud",
+        "url": "https://soundcloud.com/dcouncil/raveyard-practice?utm_medium=api&utm_campaign=social_sharing&utm_source=id_338842"
+      }
+    ]
+  },
+  {
+    "id": "post-2",
+    "title": "FridayFlow Oct 28 2026",
+    "date": "2026-10-29",
+    "tags": [
+      "audio",
+      "soundcloud",
+      "dance & edm",
+      "freestyle",
+      "spooky"
+    ],
+    "summary": "He's Back! The glorious return of The Professor to the FridayFlow decks. Some slight preparation for the RaveYard on Saturday, mostly just m...",
+    "content": "He's Back! The glorious return of The Professor to the FridayFlow decks. Some slight preparation for the RaveYard on Saturday, mostly just messin about.\n\nTracklist:\nWaykin - Beso (Fruta Fresca) ft Carlos Vives\nMoeaike - Falling In Love\nModerat - More Love (Rampa &ME Remix)\nReinier Zonneveld - Plastic People\nHot Since 82 - Preach ft Ron Carroll\nHot Since 82 - Reach Out ft Rowetta & Sweet Mercy\nSolee - Sommerliebe (Eelke Kleijn Remix)",
+    "coverImage": "https://i1.sndcdn.com/artworks-iXZk5cYizwYeEWpC-81syMQ-t500x500.jpg",
+    "links": [
+      {
+        "type": "soundcloud",
+        "label": "Listen on SoundCloud",
+        "url": "https://soundcloud.com/dcouncil/fridayflow-oct-28-2026?utm_medium=api&utm_campaign=social_sharing&utm_source=id_338842"
       }
     ]
   },

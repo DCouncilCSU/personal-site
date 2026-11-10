@@ -78,9 +78,14 @@ async function loadPosts() {
         .map(tag => `<span class="tag-badge">#${escapeHtml(tag)}</span>`)
         .join("");
 
+      // If there's exactly one link, make the title, cover, and summary clickable
+      const singleUrl = (post.links && post.links.length === 1) ? post.links[0].url : null;
+      const linkOpen  = singleUrl ? `<a href="${singleUrl}" target="_blank" rel="noopener noreferrer" class="post-primary-link">` : "";
+      const linkClose = singleUrl ? `</a>` : "";
+
       // Cover image if specified
       const coverHtml = post.coverImage
-        ? `<img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">`
+        ? `${linkOpen}<img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">${linkClose}`
         : "";
 
       // Links (SoundCloud, GitHub, etc.)
@@ -98,9 +103,9 @@ async function loadPosts() {
           <time class="post-date">${formatDate(post.date)}</time>
           <div class="post-tags">${tagsHtml}</div>
         </div>
-        <h2 class="post-title">${escapeHtml(post.title)}</h2>
+        <h2 class="post-title">${linkOpen}${escapeHtml(post.title)}${linkClose}</h2>
         ${coverHtml}
-        <div class="post-body">${escapeHtml(post.content || post.summary || "")}</div>
+        <div class="post-body">${linkOpen}${escapeHtml(post.content || post.summary || "")}${linkClose}</div>
         ${linksHtml}
       `;
 
