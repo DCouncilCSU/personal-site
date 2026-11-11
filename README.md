@@ -38,7 +38,7 @@ npm start
 ---
 
 ### SoundCloud Sync
-- **1-Click Sync in Admin Panel:** Click `♬ Sync SoundCloud Tracks` in the local admin panel (`/admin`) to fetch tracks published in the last 30 days from your SoundCloud profile and automatically append them to `public/content/posts.json` if not already present.
+- **1-Click Sync in Admin Panel:** Click `♬ Sync SoundCloud Tracks` in the local admin panel (`/admin`) to fetch tracks published in the last 30 days from your SoundCloud profile and automatically append them to `public/content/posts.json` if not already present. See .env.example for required credentials.
 - **Local-only credentials:** Configure `SC_CLIENT_ID`, `SC_CLIENT_SECRET`, and `SC_PROFILE_URI` in `.env`. Credentials stay on your local machine and are never deployed to Firebase Hosting.
 
 ---
@@ -70,10 +70,6 @@ Open `public/css/style.css`. All colors, fonts, border widths, and shadows are e
   ...
 }
 ```
-
-### 4. SoundCloud API
-A builtin integration with SoundCloud can be run from the admin panel.
-- **SoundCloud API credentials:** The `SoundCloud` key in `.env` is only used by the local Node.js server (`serve.mjs`) and is not deployed to Firebase Hosting.
 
 ---
 
@@ -111,5 +107,53 @@ Your site will instantly be live at `https://<your-project-id>.web.app` and `htt
 5. Add the `TXT` and `A` records provided by Firebase.
 6. Firebase will automatically provision an SSL certificate (usually active within 15–30 minutes).
 
+---
 
 ## Future Enhancements
+1. SoulBay v2
+```
+Personal Brand Market — Ruleset v1
+Goal: Finish a 14-day round with the highest portfolio value.
+
+Starting setup
+Each player receives 1,000 game credits and 100 shares of their own brand.
+Every brand starts at 10 credits per share, so everyone starts with equal value: 2,000 credits.
+Shares can be traded between players. No new shares are issued during a round.
+You can’t borrow money, sell shares you don’t own, or trade with yourself.
+Daily play
+Complete one brand mission. Choose from a rotating set, such as shipping a small project, posting a progress update, or completing a collaboration. Each verified mission earns 1 Growth Point. Skipping a day has no penalty.
+Place buy or sell orders. Use limit orders: set the price you’re willing to pay or accept. Orders match when a buyer’s offer meets a seller’s price. A match executes at the price of the order that was already waiting.
+Review the daily close. The site updates each brand’s reference price and posts market activity.
+Brand value and share prices
+Each brand’s fundamental value is:
+
+Fundamental value = 10 credits + 0.50 credits × Growth Points earned
+It caps at 15 credits per share for the round.
+
+At the end of each day:
+
+Market value is the volume-weighted average of that day’s trades. If no shares traded, use the previous close.
+Raw close = 70% of fundamental value + 30% of market value.
+The closing price can move by at most 10% from the previous day’s close, and can’t fall below 1 credit.
+To limit extreme orders, a buy or sell order must be within 15% of the previous close. The seller pays a 1% fee on each completed trade, rounded to the nearest cent.
+
+Winning
+At the end of Day 14, each player’s value is:
+
+Cash + the final closing value of every share they own
+
+Unspent cash counts. The player with the highest total wins. Ties go first to the player with more Growth Points, then to the player with more cash.
+
+Example
+Asha starts with 1,000 credits and 100 shares of her brand. She completes a mission, raising her fundamental value from 10 to 10.50. Theo buys 5 of her shares at 10.50.
+
+With that as the day’s only trade, the market value is 10.50, so Asha’s closing price is also 10.50.
+
+Asha receives 52.50 credits minus a 0.53 fee. She has 1,051.97 credits and 95 shares worth 997.50: 2,049.47 total.
+Theo spends 52.50 credits and now owns 5 shares of Asha’s brand worth 52.50. His total portfolio value is unchanged by the trade, before fees.
+Good defaults for fairness
+Keep mission rewards based on completed actions, not likes or follower counts. Give everyone the same starting resources and mission options. Publish the price formula before the round starts.
+
+Optional later: Add a public event every few days, such as a collaboration bonus that affects a whole category of brands. Keeping events broad and visible makes them easier to understand and harder to target at one player.
+```
+
