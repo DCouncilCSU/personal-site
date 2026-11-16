@@ -32,7 +32,14 @@ export function createPostStore(postsFile = DEFAULT_POSTS_FILE) {
     }
 
     function save(posts) {
-        posts.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+        posts.sort((a, b) => {
+            const dateComparison = (b.date || "").localeCompare(a.date || "");
+            if (dateComparison !== 0) return dateComparison;
+
+            const numA = a.id && a.id.startsWith("post-") ? parseInt(a.id.slice(5), 10) : 0;
+            const numB = b.id && b.id.startsWith("post-") ? parseInt(b.id.slice(5), 10) : 0;
+            return numB - numA;
+        });
         const total = posts.length;
         posts.forEach((post, index) => {
             post.id = `post-${total - index}`;
@@ -87,7 +94,14 @@ export function createPostStore(postsFile = DEFAULT_POSTS_FILE) {
     function create(input) {
         const posts = list();
         const post = normalizeInput(input);
-        posts.push(post);
+        // Find highest existing post-N number to make this new post definitively newer
+        let maxNum = 0;
+        for (const p of posts) {
+            const num = p.id && p.id.startsWith("post-") ? parseInt(p.id.slice(5), 10) : 0;
+            if (num > maxNum) maxNum = num;
+        }
+        post.id = `post-${maxNum + 1}`;
+        posts.unshift(post);
         save(posts);
         return post;
     }

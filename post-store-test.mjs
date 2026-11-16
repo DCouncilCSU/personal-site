@@ -101,3 +101,108 @@ test("report missing IDs as not found", (t) => {
         (error) => error instanceof PostStoreError && error.statusCode === 404
     );
 });
+
+test("sort posts on the same date with newer posts placed first", (t) => {
+    const { store } = makeStore(t);
+
+    const firstPostOfDay = store.create({
+        title: "Morning Post",
+        date: "2026-11-08"
+    });
+    assert.equal(firstPostOfDay.id, "post-1");
+
+    const secondPostOfDay = store.create({
+        title: "Afternoon Post",
+        date: "2026-11-08"
+    });
+    assert.equal(secondPostOfDay.id, "post-2");
+
+    // Newer post on the same day should rank first
+    const list = store.list();
+    assert.deepEqual(
+        list.map(({ id, title }) => ({ id, title })),
+        [
+            { id: "post-2", title: "Afternoon Post" },
+            { id: "post-1", title: "Morning Post" }
+        ]
+    );
+
+    // Adding a post from a previous date should place it at the bottom
+    const olderPost = store.create({
+        title: "Previous Day Post",
+        date: "2026-11-07"
+    });
+    assert.equal(olderPost.id, "post-1");
+
+    assert.deepEqual(
+        store.list().map(({ id, title }) => ({ id, title })),
+        [
+            { id: "post-3", title: "Afternoon Post" },
+            { id: "post-2", title: "Morning Post" },
+            { id: "post-1", title: "Previous Day Post" }
+        ]
+    );
+});
+
+test("validate cover image formats and error handling", (t) => {
+    const { store } = makeStore(t);
+
+    // Valid site path and https URL
+    const localCover = store.create({ title: "Local Cover", coverImage: "/assets/banner.svg" });
+    assert.equal(localCover.coverImage, "/assets/banner.svg");
+
+    const remoteCover = store.create({ title: "Remote Cover", coverImage: "https://example.com/img.png" });
+    assert.equal(remoteCover.coverImage, "https://example.com/img.png");
+
+    // Empty or whitespace strings should become null
+    const emptyCover = store.create({ title: "Empty Cover", coverImage: "   " });
+    assert.equal(emptyCover.coverImage, null);
+
+    // Protocol-relative and invalid formats should throw
+    assert.throws(() => store.create({ title: "Bad Cover", coverImage: "//evil.com/img.png" }), PostStoreError);
+    assert.throws(() => store.create({ title: "Bad Cover", coverImage: "ftp://example.com/img.png" }), PostStoreError);
+    assert.throws(() => store.create({ title: "Bad Cover", coverImage: 12345 }), PostStoreError);
+});
+
+test("validate link structure and permitted protocols", (t) => {
+    const { store } = makeStore(t);
+
+    // Valid http, https, and mailto links
+    const postWithLinks = store.create({
+        title: "Linked Post",
+        links: [
+            { type: "soundcloud", label: "Music", url: "https://soundcloud.com/artist/track" },
+            { type: "website", label: "Blog", url: "http://example.com" },
+            { type: "external", label: "Contact", url: "mailto:user@example.com" }
+        ]
+    });
+    assert.equal(postWithLinks.links.length, 3);
+
+    // Invalid link structures and protocols
+    assert.throws(() => store.create({ title: "Bad", links: "not-an-array" }), PostStoreError);
+    assert.throws(() => store.create({ title: "Bad", links: ["not-an-object"] }), PostStoreError);
+    assert.throws(() => store.create({ title: "Bad", links: [{ type: "test", label: "Missing URL" }] }), PostStoreError);
+    assert.throws(() => store.create({ title: "Bad", links: [{ type: "test", label: "Link", url: "file:///etc/passwd" }] }), PostStoreError);
+});
+
+test("handle corrupt or invalid posts file gracefully", (t) => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "personal-site-corrupt-"));
+    const postsFile = path.join(directory, "posts.json");
+    t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+
+    // Non-array JSON
+    fs.writeFileSync(postsFile, `{"not": "an array"}\n`);
+    const notArrayStore = createPostStore(postsFile);
+    assert.throws(
+        () => notArrayStore.list(),
+        (err) => err instanceof PostStoreError && err.statusCode === 500
+    );
+
+    // Malformed JSON syntax
+    fs.writeFileSync(postsFile, `[ invalid json `);
+    const syntaxErrorStore = createPostStore(postsFile);
+    assert.throws(
+        () => syntaxErrorStore.list(),
+        (err) => err instanceof PostStoreError && err.statusCode === 500
+    );
+});
