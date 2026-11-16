@@ -19,6 +19,11 @@
       "name": "Email",
       "url": "mailto:dcouncilcsu@gmail.com",
       "icon": "envelope"
+    },
+    {
+      "name": "More About Me",
+      "url": "/about",
+      "icon": "user"
     }
   ],
   "footer": {

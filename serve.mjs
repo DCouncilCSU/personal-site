@@ -260,6 +260,11 @@ const server = http.createServer(async (req, res) => {
     return serveFile(path.join(ADMIN_DIR, "admin.css"), 200, res);
   }
 
+  //About page
+  if (pathname === "/about" || pathname === "/about/" || pathname === "/about/index.html") {
+    return serveFile(path.join(PUBLIC_DIR, "about.html"), 200, res);
+  }
+
   // Default to index.html
   if (pathname === "/" || pathname === "") {
     pathname = "/index.html";
