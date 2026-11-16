@@ -256,6 +256,9 @@ const server = http.createServer(async (req, res) => {
   if (pathname === "/admin/admin.css") {
     return serveFile(path.join(ADMIN_DIR, "admin.css"), 200, res);
   }
+  if (pathname === "/admin/admin.js") {
+    return serveFile(path.join(ADMIN_DIR, "admin.js"), 200, res);
+  }
 
   // Default to index.html
   if (pathname === "/" || pathname === "") {
