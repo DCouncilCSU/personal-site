@@ -115,9 +115,14 @@ async function loadPosts() {
       const linkOpen  = singleUrl ? `<a href="${singleUrl}" target="_blank" rel="noopener noreferrer" class="post-primary-link">` : "";
       const linkClose = singleUrl ? `</a>` : "";
 
-      // Cover image if specified
+      // Cover image if specified (with hover toggle to hide/show)
       const coverHtml = post.coverImage
-        ? `${linkOpen}<img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">${linkClose}`
+        ? `<div class="post-cover-wrapper">
+             <button type="button" class="cover-toggle-btn" aria-label="Hide cover image">Hide Image</button>
+             <div class="cover-image-container">
+               ${linkOpen}<img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">${linkClose}
+             </div>
+           </div>`
         : "";
 
       // Links (SoundCloud, GitHub, etc.)
@@ -142,6 +147,20 @@ async function loadPosts() {
       `;
 
       container.appendChild(card);
+    });
+
+    // Handle cover image hide/show toggle buttons
+    container.querySelectorAll(".post-cover-wrapper").forEach(wrapper => {
+      const btn = wrapper.querySelector(".cover-toggle-btn");
+      if (!btn) return;
+
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isHidden = wrapper.classList.toggle("is-hidden");
+        btn.textContent = isHidden ? "Show Image" : "Hide Image";
+        btn.setAttribute("aria-label", isHidden ? "Show cover image" : "Hide cover image");
+      });
     });
   } catch (err) {
     console.error("Posts error:", err);
