@@ -41,29 +41,33 @@ async function loadConfig() {
       a.innerHTML = `${iconSvg} <span>${link.name}</span>`;
 
       if (link.url && link.url.startsWith("mailto:")) {
-        // Obfuscate mailto: link to protect against web scrapers
+        // Obfuscate email and provide reliable Click-to-Copy
         const email = link.url.slice("mailto:".length);
         const encoded = btoa(email);
         a.dataset.contact = encoded;
         a.href = "#";
-        a.target = "_self";
-        a.rel = "noopener noreferrer";
+        a.setAttribute("role", "button");
+        a.title = "Click to copy email address";
 
-        const activateEmail = (e) => {
+        a.addEventListener("click", async (e) => {
+          e.preventDefault();
           if (!a.dataset.contact) return;
           const decoded = atob(a.dataset.contact);
-          a.href = `mailto:${decoded}`;
-          if (e.type === "click") {
-            // Let the browser handle opening the mail client naturally
-            setTimeout(() => {
-              a.href = "#";
-            }, 500);
-          }
-        };
+          const labelSpan = a.querySelector("span");
+          const originalText = labelSpan ? labelSpan.textContent : link.name;
 
-        a.addEventListener("pointerdown", activateEmail);
-        a.addEventListener("focus", activateEmail);
-        a.addEventListener("click", activateEmail);
+          try {
+            await navigator.clipboard.writeText(decoded);
+            if (labelSpan) labelSpan.textContent = "Copied!";
+          } catch {
+            // Prompt fallback if clipboard permissions are blocked
+            window.prompt("Copy email address:", decoded);
+          }
+
+          setTimeout(() => {
+            if (labelSpan) labelSpan.textContent = originalText;
+          }, 2000);
+        });
       } else {
         const isInternal = link.url && (link.url.startsWith("/") || link.url.startsWith("#"));
         a.href = link.url;
