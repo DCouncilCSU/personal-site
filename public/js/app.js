@@ -37,12 +37,40 @@ async function loadConfig() {
     (config.links || []).forEach(link => {
       const a = document.createElement("a");
       a.className = "nav-link";
-      a.href = link.url;
-      a.target = link.url.startsWith("mailto:") ? "_self" : "_blank";
-      a.rel = "noopener noreferrer";
-
       const iconSvg = ICONS[link.icon] || ICONS.external;
       a.innerHTML = `${iconSvg} <span>${link.name}</span>`;
+
+      if (link.url && link.url.startsWith("mailto:")) {
+        // Obfuscate mailto: link to protect against web scrapers
+        const email = link.url.slice("mailto:".length);
+        const encoded = btoa(email);
+        a.dataset.contact = encoded;
+        a.href = "#";
+        a.target = "_self";
+        a.rel = "noopener noreferrer";
+
+        const activateEmail = (e) => {
+          if (!a.dataset.contact) return;
+          const decoded = atob(a.dataset.contact);
+          a.href = `mailto:${decoded}`;
+          if (e.type === "click") {
+            // Let the browser handle opening the mail client naturally
+            setTimeout(() => {
+              a.href = "#";
+            }, 500);
+          }
+        };
+
+        a.addEventListener("pointerdown", activateEmail);
+        a.addEventListener("focus", activateEmail);
+        a.addEventListener("click", activateEmail);
+      } else {
+        const isInternal = link.url && (link.url.startsWith("/") || link.url.startsWith("#"));
+        a.href = link.url;
+        a.target = isInternal ? "_self" : "_blank";
+        a.rel = "noopener noreferrer";
+      }
+
       navEl.appendChild(a);
     });
 
