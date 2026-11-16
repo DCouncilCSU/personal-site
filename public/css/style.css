@@ -350,7 +350,7 @@ a.post-primary-link:hover img.post-cover {
 }
 
 .post-cover {
-  width: 100%;
+  width: 60%;
   max-height: 320px;
   object-fit: cover;
   border: var(--border-width) solid var(--border-color);
