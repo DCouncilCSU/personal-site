@@ -110,9 +110,9 @@ async function loadPosts() {
         .map(tag => `<span class="tag-badge">#${escapeHtml(tag)}</span>`)
         .join("");
 
-      // If there's exactly one link, make the title, cover, and summary clickable
+      // If there's exactly one link, make the title clickable
       const singleUrl = (post.links && post.links.length === 1) ? post.links[0].url : null;
-      const linkOpen  = singleUrl ? `<a href="${singleUrl}" target="_blank" rel="noopener noreferrer" class="post-primary-link">` : "";
+      const linkOpen = singleUrl ? `<a href="${singleUrl}" target="_blank" rel="noopener noreferrer" class="post-primary-link">` : "";
       const linkClose = singleUrl ? `</a>` : "";
 
       // Cover image if specified (with hover toggle to hide/show)
@@ -120,7 +120,7 @@ async function loadPosts() {
         ? `<div class="post-cover-wrapper">
              <button type="button" class="cover-toggle-btn" aria-label="Hide cover image">Hide Image</button>
              <div class="cover-image-container">
-               ${linkOpen}<img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">${linkClose}
+               <img class="post-cover" src="${post.coverImage}" alt="${escapeHtml(post.title)}" loading="lazy">
              </div>
            </div>`
         : "";
@@ -142,7 +142,7 @@ async function loadPosts() {
         </div>
         <h2 class="post-title">${linkOpen}${escapeHtml(post.title)}${linkClose}</h2>
         ${coverHtml}
-        <div class="post-body">${linkOpen}${escapeHtml(post.content || post.summary || "")}${linkClose}</div>
+        <div class="post-body">${linkOpen}${escapeHtml(post.content || "")}${linkClose}</div>
         ${linksHtml}
       `;
 

@@ -53,11 +53,6 @@
         </div>
 
         <div class="form-group">
-          <label for="summary">Summary</label>
-          <input type="text" id="summary" placeholder="One-line summary for preview card...">
-        </div>
-
-        <div class="form-group">
           <label for="coverImage">Cover Image URL (optional)</label>
           <input type="text" id="coverImage" placeholder="/assets/sample-artwork.svg or empty">
         </div>
@@ -259,7 +254,6 @@
       document.getElementById('title').value = post.title || '';
       document.getElementById('date').value = post.date || '';
       document.getElementById('tags').value = (post.tags || []).join(', ');
-      document.getElementById('summary').value = post.summary || '';
       document.getElementById('coverImage').value = post.coverImage || '';
       document.getElementById('content').value = post.content || '';
 
@@ -331,7 +325,6 @@
         title: document.getElementById('title').value,
         date: document.getElementById('date').value,
         tags: document.getElementById('tags').value,
-        summary: document.getElementById('summary').value,
         coverImage: document.getElementById('coverImage').value || null,
         content: document.getElementById('content').value,
         links: links

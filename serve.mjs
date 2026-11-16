@@ -212,9 +212,6 @@ const server = http.createServer(async (req, res) => {
             title: title || "SoundCloud Track",
             date: dateStr,
             tags: tags.slice(0, 5),
-            summary: track.description
-              ? (track.description.split("\n")[0].slice(0, 140) + (track.description.length > 140 ? "..." : ""))
-              : `New release on SoundCloud: ${title}`,
             content: track.description ? track.description.split('\n').slice(0, 10).concat(['...']).join('\n') : `Listen to ${title} on SoundCloud.`,
             coverImage: artwork,
             links: [

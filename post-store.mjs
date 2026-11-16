@@ -69,7 +69,6 @@ export function createPostStore(postsFile = DEFAULT_POSTS_FILE) {
             throw new PostStoreError("Tags must be a string or an array of strings");
         }
 
-        const summary = readOptionalString(input.summary, "Summary");
         const content = readOptionalString(input.content, "Content");
         const coverImage = readCoverImage(input.coverImage);
         const links = readLinks(input.links);
@@ -79,7 +78,6 @@ export function createPostStore(postsFile = DEFAULT_POSTS_FILE) {
             title: input.title.trim(),
             date,
             tags,
-            summary,
             content,
             coverImage,
             links

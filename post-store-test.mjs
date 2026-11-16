@@ -15,14 +15,13 @@ function makeStore(t, initialPosts = []) {
 
 test("create, list, update, and delete posts through the store", (t) => {
     const { store } = makeStore(t, [
-        { id: "post-1", title: "Older", date: "2025-01-01", tags: [], summary: "", content: "", coverImage: null, links: [] }
+        { id: "post-1", title: "Older", date: "2025-01-01", tags: [], content: "", coverImage: null, links: [] }
     ]);
 
     const created = store.create({
         title: " New post ",
         date: "2026-03-10",
         tags: "Audio, Ambient",
-        summary: " Summary ",
         content: " Notes ",
         coverImage: "/assets/sample-artwork.svg",
         links: [
@@ -41,7 +40,6 @@ test("create, list, update, and delete posts through the store", (t) => {
         title: "Updated",
         date: "",
         tags: ["Mixed Case"],
-        summary: "",
         content: "Updated notes",
         coverImage: null,
         links: []
@@ -63,7 +61,6 @@ test("append imports through the shared sorting and ID assignment", (t) => {
         title: "Imported",
         date: "2026-01-02",
         tags: ["audio"],
-        summary: "",
         content: "",
         coverImage: "https://example.com/art.jpg",
         links: [{ type: "soundcloud", label: "Listen", url: "https://soundcloud.com/example" }]
@@ -75,7 +72,7 @@ test("append imports through the shared sorting and ID assignment", (t) => {
 
 test("reject invalid post fields without changing stored posts", (t) => {
     const initialPosts = [
-        { id: "post-1", title: "Existing", date: "2025-01-01", tags: [], summary: "", content: "", coverImage: null, links: [] }
+        { id: "post-1", title: "Existing", date: "2025-01-01", tags: [], content: "", coverImage: null, links: [] }
     ];
     const { store, postsFile } = makeStore(t, initialPosts);
 
