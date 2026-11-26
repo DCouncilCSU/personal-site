@@ -167,6 +167,8 @@ select:focus {
   overflow: hidden;
   position: relative;
   background-color: #18181b;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Light mode overlay: soft mist wash blending into the card */
@@ -181,6 +183,7 @@ select:focus {
   mix-blend-mode: screen;
   pointer-events: none;
   transition: opacity 0.2s ease;
+  z-index: 2;
 }
 
 .banner-img {
@@ -188,6 +191,53 @@ select:focus {
   height: 100%;
   object-fit: cover;
   display: block;
+  transform-origin: center center;
+}
+
+/* Banner Glitch Animation Variants (Selected randomly on click) */
+.banner-container.is-glitching.glitch-var-0 .banner-img {
+  animation: bannerTapeGlitchA 0.45s steps(2, jump-none) forwards;
+}
+.banner-container.is-glitching.glitch-var-1 .banner-img {
+  animation: bannerTapeGlitchB 0.38s steps(3, jump-none) forwards;
+}
+.banner-container.is-glitching.glitch-var-2 .banner-img {
+  animation: bannerTapeGlitchC 0.52s steps(2, jump-none) forwards;
+}
+
+/* Temporarily suppress overlay during glitch burst for punchy contrast */
+.banner-container.is-glitching::after {
+  opacity: 0.15;
+}
+
+/* Variant A: Horizontal tracking drift & chromatic aberration */
+@keyframes bannerTapeGlitchA {
+  0% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+  20% { transform: translate(-14px, 2px) skewX(-7deg) scale(1.03, 0.98); filter: hue-rotate(90deg) saturate(2.2) contrast(1.5); }
+  40% { transform: translate(16px, -3px) skewX(9deg) scale(0.97, 1.04); filter: hue-rotate(-110deg) saturate(2.6) contrast(1.8); }
+  60% { transform: translate(-8px, 4px) skewX(-4deg) scale(1.02, 0.98); filter: invert(0.65) hue-rotate(180deg) saturate(2.8); }
+  80% { transform: translate(10px, -2px) skewX(5deg) scale(1.01, 1.01); filter: hue-rotate(60deg) contrast(1.4); }
+  100% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+}
+
+/* Variant B: Fast stuttering vertical sync roll & scan inversion */
+@keyframes bannerTapeGlitchB {
+  0% { transform: translate(0, 0) scale(1); filter: none; }
+  15% { transform: translate(6px, -12px) skewY(2deg) scale(1.02); filter: invert(0.9) contrast(2.2); }
+  35% { transform: translate(-8px, 15px) skewX(-10deg) scale(0.98); filter: hue-rotate(180deg) saturate(3); }
+  55% { transform: translate(10px, -8px) skewY(-3deg) scale(1.04); filter: brightness(1.7) contrast(1.9); }
+  75% { transform: translate(-4px, 5px) skewX(6deg) scale(1); filter: hue-rotate(-75deg) saturate(2.5); }
+  100% { transform: translate(0, 0) scale(1); filter: none; }
+}
+
+/* Variant C: Heavy magnetic head stretch & saturated color burst */
+@keyframes bannerTapeGlitchC {
+  0% { transform: translate(0, 0) scale(1); filter: none; }
+  18% { transform: translate(18px, 1px) scale(1.06, 0.92) skewX(12deg); filter: saturate(4) hue-rotate(140deg); }
+  38% { transform: translate(-16px, -4px) scale(0.94, 1.08) skewX(-14deg); filter: invert(0.8) hue-rotate(-120deg) contrast(2); }
+  65% { transform: translate(12px, 3px) scale(1.03, 0.96) skewX(7deg); filter: hue-rotate(45deg) saturate(3) brightness(1.3); }
+  85% { transform: translate(-5px, 0) scale(1.01, 1) skewX(-2deg); filter: contrast(1.6); }
+  100% { transform: translate(0, 0) scale(1); filter: none; }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -198,6 +248,34 @@ select:focus {
   /* Disable overlay in dark mode to preserve original midnight contrast */
   .banner-container::after {
     opacity: 0;
+  }
+
+  /* Dark mode variants: boosted brightness & neon spectral tracking */
+  @keyframes bannerTapeGlitchA {
+    0% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+    20% { transform: translate(-16px, 3px) skewX(-8deg) scale(1.04, 0.97); filter: hue-rotate(120deg) saturate(3.2) brightness(1.3) contrast(1.8); }
+    40% { transform: translate(18px, -3px) skewX(10deg) scale(0.97, 1.05); filter: hue-rotate(-120deg) saturate(3.8) brightness(1.3) contrast(2.2); }
+    60% { transform: translate(-10px, 4px) skewX(-5deg) scale(1.03, 0.98); filter: invert(0.85) hue-rotate(180deg) brightness(1.5) contrast(2.4); }
+    80% { transform: translate(11px, -2px) skewX(6deg) scale(1.01, 1.01); filter: hue-rotate(75deg) brightness(1.2) contrast(1.7); }
+    100% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+  }
+
+  @keyframes bannerTapeGlitchB {
+    0% { transform: translate(0, 0) scale(1); filter: none; }
+    15% { transform: translate(8px, -15px) skewY(3deg) scale(1.03); filter: invert(0.95) brightness(1.4) contrast(2.5); }
+    35% { transform: translate(-10px, 18px) skewX(-12deg) scale(0.97); filter: hue-rotate(200deg) saturate(4) brightness(1.3); }
+    55% { transform: translate(12px, -10px) skewY(-4deg) scale(1.05); filter: brightness(2) contrast(2); }
+    75% { transform: translate(-5px, 6px) skewX(7deg) scale(1); filter: hue-rotate(-85deg) saturate(3) brightness(1.2); }
+    100% { transform: translate(0, 0) scale(1); filter: none; }
+  }
+
+  @keyframes bannerTapeGlitchC {
+    0% { transform: translate(0, 0) scale(1); filter: none; }
+    18% { transform: translate(20px, 2px) scale(1.08, 0.9) skewX(14deg); filter: saturate(4.5) hue-rotate(150deg) brightness(1.4); }
+    38% { transform: translate(-18px, -4px) scale(0.92, 1.1) skewX(-16deg); filter: invert(0.9) hue-rotate(-140deg) brightness(1.3) contrast(2.4); }
+    65% { transform: translate(14px, 3px) scale(1.04, 0.95) skewX(8deg); filter: hue-rotate(60deg) saturate(3.5) brightness(1.4); }
+    85% { transform: translate(-6px, 0) scale(1.01, 1) skewX(-3deg); filter: contrast(1.8) brightness(1.2); }
+    100% { transform: translate(0, 0) scale(1); filter: none; }
   }
 }
 
@@ -217,12 +295,68 @@ select:focus {
   border: var(--border-width) solid var(--border-color);
   overflow: hidden;
   background: var(--bg-card);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.avatar-container:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 var(--border-color);
+}
+
+.avatar-container:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 var(--border-color);
 }
 
 .avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transform-origin: center center;
+}
+
+/* Avatar Glitch Animation Variants (Selected randomly on click) */
+.avatar-container.is-glitching.glitch-var-0 .avatar-img {
+  animation: avatarTapeGlitchA 0.42s steps(2, jump-none) forwards;
+}
+.avatar-container.is-glitching.glitch-var-1 .avatar-img {
+  animation: avatarTapeGlitchB 0.36s steps(3, jump-none) forwards;
+}
+.avatar-container.is-glitching.glitch-var-2 .avatar-img {
+  animation: avatarTapeGlitchC 0.48s steps(2, jump-none) forwards;
+}
+
+/* Avatar Variant A: Classic skew & chromatic phase burst */
+@keyframes avatarTapeGlitchA {
+  0% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+  20% { transform: translate(-5px, 2px) skewX(-14deg) scale(1.08, 0.94); filter: hue-rotate(90deg) saturate(2.5) contrast(1.6); }
+  40% { transform: translate(6px, -2px) skewX(18deg) scale(0.92, 1.1); filter: hue-rotate(-90deg) invert(0.2) contrast(2); }
+  60% { transform: translate(-3px, 3px) skewX(-8deg) scale(1.04, 0.96); filter: invert(0.8) hue-rotate(180deg) saturate(3); }
+  80% { transform: translate(4px, -1px) skewX(10deg) scale(1.02, 1.02); filter: hue-rotate(45deg) contrast(1.5); }
+  100% { transform: translate(0, 0) skewX(0deg) scale(1); filter: none; }
+}
+
+/* Avatar Variant B: Vertical tape stutter & quick color flash */
+@keyframes avatarTapeGlitchB {
+  0% { transform: translate(0, 0) scale(1); filter: none; }
+  15% { transform: translate(2px, -6px) scale(0.95, 1.1) skewY(4deg); filter: invert(0.9) contrast(2.2); }
+  40% { transform: translate(-3px, 7px) scale(1.1, 0.92) skewX(-10deg); filter: hue-rotate(200deg) saturate(3.5); }
+  65% { transform: translate(4px, -3px) scale(1.02, 1.02) skewY(-3deg); filter: brightness(1.6) contrast(1.8); }
+  85% { transform: translate(-2px, 1px) scale(1, 1); filter: hue-rotate(-60deg) saturate(2); }
+  100% { transform: translate(0, 0) scale(1); filter: none; }
+}
+
+/* Avatar Variant C: Rubber bounce head pinch & heavy color saturation */
+@keyframes avatarTapeGlitchC {
+  0% { transform: translate(0, 0) scale(1); filter: none; }
+  20% { transform: translate(6px, 1px) scale(1.14, 0.88) skewX(12deg); filter: saturate(4) hue-rotate(130deg); }
+  45% { transform: translate(-5px, -3px) scale(0.88, 1.14) skewX(-12deg); filter: invert(0.7) hue-rotate(-100deg) contrast(2.2); }
+  70% { transform: translate(3px, 2px) scale(1.05, 0.96) skewX(6deg); filter: hue-rotate(60deg) saturate(2.8) brightness(1.2); }
+  85% { transform: translate(-1px, 0) scale(1.01, 1) skewX(-2deg); filter: contrast(1.5); }
+  100% { transform: translate(0, 0) scale(1); filter: none; }
 }
 
 .header-text h1 {

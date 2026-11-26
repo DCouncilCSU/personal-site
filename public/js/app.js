@@ -116,12 +116,78 @@ async function loadConfig() {
     document.getElementById("site-tagline").textContent = config.tagline || "";
     document.getElementById("site-bio").textContent = config.bio || "";
 
+    // Helper to pick a new random glitch animation variant (0, 1, or 2)
+    // ensuring consecutive clicks switch to a different variant
+    const triggerDynamicGlitch = (container, totalVariants = 3) => {
+      playTapeClick();
+
+      const lastVar = parseInt(container.dataset.glitchVariant ?? "-1", 10);
+      let nextVar = Math.floor(Math.random() * totalVariants);
+      if (nextVar === lastVar) {
+        nextVar = (nextVar + 1) % totalVariants;
+      }
+      container.dataset.glitchVariant = nextVar;
+
+      // Clean up any previously applied variant classes
+      for (let i = 0; i < totalVariants; i++) {
+        container.classList.remove(`glitch-var-${i}`);
+      }
+      container.classList.remove("is-glitching");
+
+      // Force DOM reflow to allow immediate re-triggering of animations
+      void container.offsetWidth;
+
+      container.classList.add("is-glitching", `glitch-var-${nextVar}`);
+    };
+
     // Populate header artwork if defined
     if (config.banner) {
-      document.getElementById("site-banner").src = config.banner;
+      const bannerImg = document.getElementById("site-banner");
+      bannerImg.src = config.banner;
+
+      // Wire up interactive tape glitch Easter egg on the banner image
+      const bannerContainer = bannerImg.closest(".banner-container") || bannerImg.parentElement;
+      if (bannerContainer) {
+        bannerContainer.setAttribute("role", "button");
+        bannerContainer.setAttribute("tabindex", "0");
+        bannerContainer.title = "Click to test";
+
+        bannerContainer.addEventListener("click", () => triggerDynamicGlitch(bannerContainer));
+        bannerContainer.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            triggerDynamicGlitch(bannerContainer);
+          }
+        });
+
+        bannerContainer.addEventListener("animationend", () => {
+          bannerContainer.classList.remove("is-glitching");
+        });
+      }
     }
     if (config.avatar) {
-      document.getElementById("site-avatar").src = config.avatar;
+      const avatarImg = document.getElementById("site-avatar");
+      avatarImg.src = config.avatar;
+
+      // Wire up interactive tape glitch Easter egg on the avatar
+      const avatarContainer = avatarImg.closest(".avatar-container") || avatarImg.parentElement;
+      if (avatarContainer) {
+        avatarContainer.setAttribute("role", "button");
+        avatarContainer.setAttribute("tabindex", "0");
+        avatarContainer.title = "Click to test";
+
+        avatarContainer.addEventListener("click", () => triggerDynamicGlitch(avatarContainer));
+        avatarContainer.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            triggerDynamicGlitch(avatarContainer);
+          }
+        });
+
+        avatarContainer.addEventListener("animationend", () => {
+          avatarContainer.classList.remove("is-glitching");
+        });
+      }
     }
 
     // Populate navigation links bar
