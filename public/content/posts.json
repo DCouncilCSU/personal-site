@@ -1,5 +1,18 @@
 [
   {
+    "id": "post-10",
+    "title": "CSS and JS Sugar",
+    "date": "2026-11-26",
+    "tags": [
+      "audio",
+      "easter egg",
+      "click"
+    ],
+    "content": "Some JS sugar for the back, and some CSS sugar for the front. Have fun!",
+    "coverImage": null,
+    "links": []
+  },
+  {
     "id": "post-9",
     "title": "Obfuscation is goood",
     "date": "2026-11-16",
